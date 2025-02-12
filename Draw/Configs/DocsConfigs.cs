@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Interfaces;
 
-namespace OAuth.Api.Configs;
+namespace OAuth.Draw.Configs;
 
 public static class DocsConfigs
 {

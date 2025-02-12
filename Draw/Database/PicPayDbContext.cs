@@ -1,4 +1,4 @@
-namespace OAuth.Api.Database;
+namespace OAuth.Draw.Database;
 
 public class OAuthDbContext(DbContextOptions<OAuthDbContext> options, IConfiguration configuration) : DbContext(options)
 {

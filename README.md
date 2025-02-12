@@ -1,5 +1,41 @@
 # OAuth 2.0 + OpenID Connect (OIDC)
 
+O objetivo desse projeto é mostrar a implementação prática dos protocolos OAuth 2.0 e OpenID Connect.
+
+Ele consiste de uma API, que vai simular uma aplicação qualquer.
+
+No primeiro caso, vamos fazer nossa API obter acesso a uma pasta no Google Drive, através do fluxo de autorização fornecido pelo OAuth.
+
+No segundo, vamos realizar o login na nossa API através de uma conta Google, através do OIDC.
+
+## Sumário
+
+
+
+## Setup Inicial
+
+- Criar projeto no Google Cloud
+
+- Configurar 
+
+
+- Dentro do projeto, criar nossas credenciais:
+    - 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - OAuth2 serve para autorizar em outro sistema (acesso limitado)
     - Estou no draw.io e quero salvar meus diagramas no Google Drive
 

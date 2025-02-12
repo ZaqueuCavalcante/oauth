@@ -2,7 +2,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace OAuth.Api.Configs;
+namespace OAuth.Draw.Configs;
 
 public static class AuthenticationConfigs
 {

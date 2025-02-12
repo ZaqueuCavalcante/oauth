@@ -1,6 +1,6 @@
 using Scalar.AspNetCore;
 
-namespace OAuth.Api.Middlewares;
+namespace OAuth.Draw.Middlewares;
 
 public static class HttpMiddlewares
 {

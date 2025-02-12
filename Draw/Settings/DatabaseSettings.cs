@@ -1,4 +1,4 @@
-namespace OAuth.Api.Settings;
+namespace OAuth.Draw.Settings;
 
 public class DatabaseSettings
 {

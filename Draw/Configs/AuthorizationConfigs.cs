@@ -1,4 +1,4 @@
-namespace OAuth.Api.Configs;
+namespace OAuth.Draw.Configs;
 
 public static class AuthorizationConfigs
 {

@@ -1,7 +1,7 @@
-using OAuth.Api.Configs;
-using OAuth.Api.Middlewares;
+using OAuth.Draw.Configs;
+using OAuth.Draw.Middlewares;
 
-namespace OAuth.Api;
+namespace OAuth.Draw;
 
 public class Startup(IConfiguration configuration)
 {

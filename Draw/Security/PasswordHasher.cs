@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace OAuth.Api.Security;
+namespace OAuth.Draw.Security;
 
 public class PasswordHasher(IPasswordHasher<IdentityUser> passwordHasher) : IPasswordHasher
 {
