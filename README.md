@@ -11,17 +11,40 @@ No segundo, vamos realizar o login na nossa API através de uma conta Google, at
 ## Sumário
 
 
+## Draw
+
+É uma API que vai simular o app draw.io
+
+Essa API possui autenticação via JWT. É possível criar um usuário e logar com ele, recebendo um JWT gerado pela própria API.
+
+Com o usuário logado, vamo fazer nossa API ter acesso ao Google Drive do usuário usando o OAuth.
+
+Também vamos realizar o famoso Login com Google, usando o OIDC. Assim o usuário vai poder logar direto na API, sem a necessidade de realizar um cadastro antes.
+
+
 
 ## Setup Inicial
 
 - Criar projeto no Google Cloud
 
-- Configurar 
+- Configurar projeto com nome Draw e domínio draw.host (aponta pro localhost)
 
+- Adicionar meu email como usuário de teste
+
+- Adicionar escopo de acesso ao Google Drive que o Draw vai pedir pro usuário
+    - https://www.googleapis.com/auth/drive.file
+    - Create new Drive files, or modify existing files, that you open with an app or that the user shares with an app while using the Google Picker API or the app's file picker.
+    - See, edit, create, and delete only the specific Google Drive files you use with this app
+
+- Adicionar escopo do OIDC para fazermos login depois
+    - openid
+    - Associate you with your personal info on Google
 
 - Dentro do projeto, criar nossas credenciais:
-    - 
-
+    - URI de origem -> http://localhost:5001
+    - URI de redirect -> http://localhost:5001/oauth/draw-callback
+    - ClientId -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
+    - ClientSecret -> Lalala@123
 
 
 
@@ -159,6 +182,43 @@ ASSIM CONSIGO DEBUGAR TODOS OS PASSOS E VER TODAS AS INFORMAÇÕES
 
 
 
+- ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
 
 
 
+
+
+
+
+
+Nome: Zaqueu
+Sobrenome: Cavalcante
+Data de nascimento: 02/03/1998
+E-mail: zaqueudovale@gmail.com
+Tipo do plano: Semestral
+Forma de pagamento: Pix
+País: Brasil
+Cidade/estado: Caruaru-PE
+Treina a quanto tempo: 2 anos
+Qual seu peso atual: 94 kg
+Qual seu peso ideal: 80 kg
+Qual sua altura: 184 cm
+
+
+Nome: Zaqueu
+Sobrenome: Cavalcante
+Idade: 26
+Peso atual: 94 kg
+
+Come quantas vezes ao dia?
+    3
+Horários que se alimenta?
+    09:00 | 12:30 | 19:00
+Qual o horário que você treina
+    16:00
+Qual o seu objetivo com a dieta?
+    Ganho de massa magra e perca de gordura.
+Qual sua maior dificuldade?
+    Saber o que preciso comer e conseguir preparar as refeições com praticidade.
+Tem alguma doença ou algo do tipo?
+    Não

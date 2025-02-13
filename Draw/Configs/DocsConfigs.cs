@@ -13,15 +13,8 @@ public static class DocsConfigs
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "OAuth API Docs",
+                Title = "Draw API Docs",
                 Description = ReadResource("api-intro.md"),
-                Extensions = new Dictionary<string, IOpenApiExtension>
-                {
-                    { "x-logo", new OpenApiObject
-                    {
-                        { "url", new OpenApiString("/oauth-logo.png") },
-                    }}
-                },
             });
 
             options.EnableAnnotations();
@@ -42,7 +35,7 @@ public static class DocsConfigs
 
             options.DescribeAllParametersInCamelCase();
 
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, "Api.xml");
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, "Draw.xml");
             options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
         });
 

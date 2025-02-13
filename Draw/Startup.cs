@@ -22,8 +22,9 @@ public class Startup(IConfiguration configuration)
         services.AddDocsConfigs();
     }
 
-    public static void Configure(IApplicationBuilder app)
+    public static void Configure(IApplicationBuilder app, DrawDbContext ctx)
     {
+        ctx.ResetDb();
         app.UseRouting();
 
         app.UseAuthentication();

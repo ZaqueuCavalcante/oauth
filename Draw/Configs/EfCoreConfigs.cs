@@ -9,6 +9,6 @@ public static class EfCoreConfigs
         DefaultTypeMap.MatchNamesWithUnderscores = true;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        services.AddDbContext<OAuthDbContext>();
+        services.AddDbContext<DrawDbContext>();
     }
 }

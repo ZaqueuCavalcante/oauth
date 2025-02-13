@@ -1,8 +1,10 @@
+using OAuth.Draw.Features.CreateUser;
+
 namespace OAuth.Draw.Database;
 
-public class OAuthDbContext(DbContextOptions<OAuthDbContext> options, IConfiguration configuration) : DbContext(options)
+public class DrawDbContext(DbContextOptions<DrawDbContext> options, IConfiguration configuration) : DbContext(options)
 {
-    // public DbSet<Wallet> Wallets { get; set; }
+    public DbSet<DrawUser> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -14,7 +16,7 @@ public class OAuthDbContext(DbContextOptions<OAuthDbContext> options, IConfigura
     {
         base.OnModelCreating(builder);
 
-        builder.HasDefaultSchema("oauth");
+        builder.HasDefaultSchema("draw");
 
         builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }

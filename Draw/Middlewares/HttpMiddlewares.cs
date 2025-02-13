@@ -16,7 +16,7 @@ public static class HttpMiddlewares
             {
                 options.WithModels(false);
                 options.WithDownloadButton(false);
-                options.WithTitle("OAuth API Docs");
+                options.WithTitle("Draw API Docs");
                 options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
                 options
                     .WithPreferredScheme("Bearer")
