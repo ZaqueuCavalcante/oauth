@@ -19,3 +19,18 @@ public class CreateGoogleDriveFileController(CreateGoogleDriveFileService servic
         return result.Match<IActionResult>(Ok, BadRequest);
     }
 }
+
+internal class RequestsExamples : IMultipleExamplesProvider<CreateGoogleDriveFileIn>
+{
+    public IEnumerable<SwaggerExample<CreateGoogleDriveFileIn>> GetExamples()
+    {
+        yield return SwaggerExample.Create(
+			"Única Linha",
+			new CreateGoogleDriveFileIn {  Name = "OneLine.txt", Content = "line one" }
+		);
+        yield return SwaggerExample.Create(
+			"Várias Linhas",
+			new CreateGoogleDriveFileIn {  Name = "ManyLines.txt", Content = "line one\nline two\nline three" }
+		);
+    }
+}

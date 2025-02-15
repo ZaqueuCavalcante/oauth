@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3627" />
     <PackageReference Include="OneOf" Version="3.0.271" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

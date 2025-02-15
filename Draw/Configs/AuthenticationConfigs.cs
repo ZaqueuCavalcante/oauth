@@ -42,8 +42,6 @@ public static class AuthenticationConfigs
                 options.Scope.Clear();
                 options.Scope.Add(googleSettings.DriveScope);
 
-                // options.UsePkce = true;
-
                 options.Events.OnCreatingTicket = async ctx =>
                 {
                     var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();

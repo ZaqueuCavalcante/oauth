@@ -1,18 +1,39 @@
+using System.Net.Http.Headers;
+
 namespace OAuth.Draw.Features.CreateGoogleDriveFile;
 
-public class CreateGoogleDriveFileService(DrawDbContext ctx) : IDrawService
+public class CreateGoogleDriveFileService(DrawDbContext ctx, IHttpClientFactory factory) : IDrawService
 {
     public async Task<OneOf<string, DrawError>> Create(Guid userId, CreateGoogleDriveFileIn data)
     {
-        var user = await ctx.Users.FirstOrDefaultAsync(u => u.Email == data.FileName);
-
-        var fileName = $"Draw_test_file_{DateTime.Now.ToString("ddMMyyyy_HHmmss")}.txt";
-
         var token = await ctx.Tokens.Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).FirstAsync();
 
-        // Usar o AccessToken para acessar o Google Drive
-        // Tem SDK pro .NET?
+        var memoryStream = new MemoryStream();
+        await using (var streamWriter = new StreamWriter(memoryStream))
+        {
+            await streamWriter.WriteAsync(data.Content);
 
-        return user.Email;
+            streamWriter.Flush();
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            using var client = factory.CreateClient();
+            client.BaseAddress = new Uri("https://www.googleapis.com");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var fileContent = new StreamContent(memoryStream);
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/plain");
+            var content = new MultipartFormDataContent
+            {
+                { fileContent, "file", data.Name }
+            };
+
+            var response = await client.PostAsync("upload/drive/v3/files?uploadType=media", content);
+            response.EnsureSuccessStatusCode();
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+        }
+
+        return "ok";
     }
 }
