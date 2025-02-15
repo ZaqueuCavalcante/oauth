@@ -26,7 +26,6 @@ public class Startup(IConfiguration configuration)
     {
         ctx.ResetDb();
 
-        app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseAuthentication();

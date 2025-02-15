@@ -27,6 +27,8 @@ Também vamos realizar o famoso Login com Google, usando o OIDC. Assim o usuári
 
 - Criar projeto no Google Cloud
 
+- Habilitar o acesso do Draw a API do Google Drive
+
 - Configurar projeto com nome Draw e domínio draw.host (aponta pro localhost)
 
 - Adicionar meu email como usuário de teste
@@ -45,12 +47,6 @@ Também vamos realizar o famoso Login com Google, usando o OIDC. Assim o usuári
     - URI de redirect -> http://localhost:5001/oauth/draw-callback
     - ClientId -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
     - ClientSecret -> Lalala@123
-
-
-
-
-
-
 
 
 
@@ -184,5 +180,4 @@ ASSIM CONSIGO DEBUGAR TODOS OS PASSOS E VER TODAS AS INFORMAÇÕES
 
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
 - How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
-
 

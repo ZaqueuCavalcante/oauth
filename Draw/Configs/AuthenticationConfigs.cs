@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using OAuth.Draw.Features.CreateUserOAuthToken;
 
 namespace OAuth.Draw.Configs;
@@ -19,7 +18,7 @@ public static class AuthenticationConfigs
                 var baseHandler = options.Events.OnRedirectToAccessDenied;
                 options.Events.OnRedirectToAccessDenied = ctx =>
                 {
-                    if (ctx.Request.Path.StartsWithSegments("/goole-drive"))
+                    if (ctx.Request.Path.StartsWithSegments("/google-drive"))
                     {
                         return ctx.HttpContext.ChallengeAsync(GoogleOAuthScheme);
                     }
@@ -37,10 +36,12 @@ public static class AuthenticationConfigs
                 options.TokenEndpoint = googleSettings.TokenEndpoint;
                 options.CallbackPath = googleSettings.CallbackPath;
 
+                options.SaveTokens = true;
+                options.AdditionalAuthorizationParameters.Add("access_type", "offline");
+
                 options.Scope.Clear();
                 options.Scope.Add(googleSettings.DriveScope);
 
-                // options.SaveTokens = true;
                 // options.UsePkce = true;
 
                 options.Events.OnCreatingTicket = async ctx =>
@@ -58,7 +59,7 @@ public static class AuthenticationConfigs
                     }
 
                     var user = authResult.Principal;
-                    var token = new UserOAuthToken(user.Id(), ctx.AccessToken);
+                    var token = new UserOAuthToken(user.Id(), ctx.AccessToken, ctx.RefreshToken);
 
                     dbCtx.Add(token);
                     await dbCtx.SaveChangesAsync();

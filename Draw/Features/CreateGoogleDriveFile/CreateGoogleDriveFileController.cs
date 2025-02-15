@@ -11,7 +11,7 @@ public class CreateGoogleDriveFileController(CreateGoogleDriveFileService servic
     /// <summary>
     /// Cria um arquivo .txt no Google Drive
     /// </summary>
-    [HttpPost("goole-drive/files")]
+    [HttpPost("google-drive/files")]
     public async Task<IActionResult> Create([FromBody] CreateGoogleDriveFileIn data)
     {
         var result = await service.Create(User.Id(), data);

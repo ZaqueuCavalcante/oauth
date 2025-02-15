@@ -10,7 +10,7 @@ public class CreateGoogleDriveFileService(DrawDbContext ctx) : IDrawService
 
         var token = await ctx.Tokens.Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).FirstAsync();
 
-        // Usar o JWT para acessar o Google Drive
+        // Usar o AccessToken para acessar o Google Drive
         // Tem SDK pro .NET?
 
         return user.Email;
