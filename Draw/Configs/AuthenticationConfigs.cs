@@ -1,45 +1,72 @@
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using OAuth.Draw.Features.CreateUserOAuthToken;
 
 namespace OAuth.Draw.Configs;
 
 public static class AuthenticationConfigs
 {
-    public const string BearerScheme = "Bearer";
+    public const string DrawCookieScheme = "DrawCookie";
+    public const string GoogleOAuthScheme = "GoogleOAuth";
 
     public static void AddAuthenticationConfigs(this IServiceCollection services, IConfiguration configuration)
     {
-        var settings = configuration.Auth();
+        var googleSettings = configuration.Google();
 
-        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = settings.Issuer,
-
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes(settings.SecurityKey)
-            ),
-
-            ValidAlgorithms = [ "HS256" ],
-
-            ValidateAudience = true,
-            ValidAudience = settings.Audience,
-
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
-
-            RoleClaimType = "role",
-        };
-
-        services.AddAuthentication(BearerScheme)
-            .AddJwtBearer(BearerScheme, options =>
+        services.AddAuthentication(DrawCookieScheme)
+            .AddCookie(DrawCookieScheme, options =>
             {
-                options.TokenValidationParameters = tokenValidationParameters;
+                var baseHandler = options.Events.OnRedirectToAccessDenied;
+                options.Events.OnRedirectToAccessDenied = ctx =>
+                {
+                    if (ctx.Request.Path.StartsWithSegments("/goole-drive"))
+                    {
+                        return ctx.HttpContext.ChallengeAsync(GoogleOAuthScheme);
+                    }
+
+                    return baseHandler(ctx);
+                };
+            })
+            .AddOAuth(GoogleOAuthScheme, options =>
+            {
+                options.SignInScheme = DrawCookieScheme;
+
+                options.ClientId = googleSettings.ClientId;
+                options.ClientSecret = googleSettings.ClientSecret;
+                options.AuthorizationEndpoint = googleSettings.AuthorizationEndpoint;
+                options.TokenEndpoint = googleSettings.TokenEndpoint;
+                options.CallbackPath = googleSettings.CallbackPath;
+
+                options.Scope.Clear();
+                options.Scope.Add(googleSettings.DriveScope);
+
+                // options.SaveTokens = true;
+                // options.UsePkce = true;
+
+                options.Events.OnCreatingTicket = async ctx =>
+                {
+                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();
+
+                    var authHandlerProvider = ctx.HttpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+                    var authHandler = await authHandlerProvider.GetHandlerAsync(ctx.HttpContext, DrawCookieScheme);
+                    var authResult = await authHandler.AuthenticateAsync();
+
+                    if (!authResult.Succeeded)
+                    {
+                        ctx.Fail($"Fail {DrawCookieScheme} authentication");
+                        return;
+                    }
+
+                    var user = authResult.Principal;
+                    var token = new UserOAuthToken(user.Id(), ctx.AccessToken);
+
+                    dbCtx.Add(token);
+                    await dbCtx.SaveChangesAsync();
+
+                    ctx.Principal = user.Clone();
+                    var identity = ctx.Principal.Identities.First(x => x.AuthenticationType == DrawCookieScheme);
+                    identity.AddClaim(new("drv", "true"));
+                };
             });
     }
 }

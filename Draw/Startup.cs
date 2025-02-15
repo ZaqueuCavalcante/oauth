@@ -25,6 +25,8 @@ public class Startup(IConfiguration configuration)
     public static void Configure(IApplicationBuilder app, DrawDbContext ctx)
     {
         ctx.ResetDb();
+
+        app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseAuthentication();

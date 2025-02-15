@@ -1,22 +1,43 @@
+using OAuth.Draw.Configs;
+using OAuth.Draw.Security;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+
 namespace OAuth.Draw.Features.Login;
 
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]
-public class LoginController(LoginService service) : ControllerBase
+public class LoginController(DrawDbContext ctx, IPasswordHasher hasher) : ControllerBase
 {
     /// <summary>
     /// 🔓 Login
     /// </summary>
     [HttpPost("login")]
-    [ProducesResponseType(typeof(LoginOut), 200)]
-    [SwaggerResponseExample(200, typeof(ResponseExamples))]
+    [ProducesResponseType(200)]
     [ProducesResponseType(typeof(ErrorOut), 400)]
     [SwaggerResponseExample(400, typeof(ErrorsExamples))]
     public async Task<IActionResult> Login([FromBody] LoginIn data)
     {
-        var result = await service.Login(data);
+        var user = await ctx.Users.FirstOrDefaultAsync(u => u.Email == data.Email);
+        if (user == null) return BadRequest(new UserNotFound());
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        var success = hasher.Verify(user.Id, user.Email, data.Password, user.PasswordHash);
+        if (!success) return BadRequest(new WrongPassword());
+
+        var claims = new List<Claim>
+        {
+            new("sub", user.Id.ToString()),
+            new("name", user.Name),
+            new("email", user.Email),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, AuthenticationConfigs.DrawCookieScheme);
+
+        await HttpContext.SignInAsync(
+            AuthenticationConfigs.DrawCookieScheme, 
+            new ClaimsPrincipal(claimsIdentity));
+
+        return LocalRedirect("/");
     }
 }
 
@@ -35,20 +56,6 @@ internal class RequestsExamples : IMultipleExamplesProvider<LoginIn>
 			new LoginIn(
                 "gilbirdelson.lanches@gmail.com",
                 "dc9ab8a59@60b44edbcd71ba5Ec1a0f")
-		);
-    }
-}
-
-internal class ResponseExamples : IMultipleExamplesProvider<LoginOut>
-{
-    public IEnumerable<SwaggerExample<LoginOut>> GetExamples()
-    {
-        yield return SwaggerExample.Create(
-			"LoginOut",
-			new LoginOut
-			{
-				AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0N2E1NmJmNC0wZWQwLTQ1NTMtOTBkOS02NTA4OGRkMzNmZGUiLCJzdWIiOiJhNGNiNzk3NC1kOWU5LTRkZDQtOGZhYi1jZGZhZmI3YjMzNTMiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYW1lIjoiSm_Do28gZGEgU2lsdmEiLCJlbWFpbCI6ImpvYW8uZGEuc2lsdmFAZ21haWwuY29tIiwibmJmIjoxNzM2NzY1MDkxLCJleHAiOjE3MzcxMjUwOTEsImlhdCI6MTczNjc2NTA5MSwiaXNzIjoicGljcGF5LWFwaS1kZXYiLCJhdWQiOiJwaWNwYXktYXBpLWRldiJ9.5DaqVrxMNeM1y3itKa2BlAGHlvrjuBg18rx3NDP9ssg"
-			}
 		);
     }
 }

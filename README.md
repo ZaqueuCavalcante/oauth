@@ -183,42 +183,6 @@ ASSIM CONSIGO DEBUGAR TODOS OS PASSOS E VER TODAS AS INFORMAÇÕES
 
 
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
+- How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
 
 
-
-
-
-
-
-
-Nome: Zaqueu
-Sobrenome: Cavalcante
-Data de nascimento: 02/03/1998
-E-mail: zaqueudovale@gmail.com
-Tipo do plano: Semestral
-Forma de pagamento: Pix
-País: Brasil
-Cidade/estado: Caruaru-PE
-Treina a quanto tempo: 2 anos
-Qual seu peso atual: 94 kg
-Qual seu peso ideal: 80 kg
-Qual sua altura: 184 cm
-
-
-Nome: Zaqueu
-Sobrenome: Cavalcante
-Idade: 26
-Peso atual: 94 kg
-
-Come quantas vezes ao dia?
-    3
-Horários que se alimenta?
-    09:00 | 12:30 | 19:00
-Qual o horário que você treina
-    16:00
-Qual o seu objetivo com a dieta?
-    Ganho de massa magra e perca de gordura.
-Qual sua maior dificuldade?
-    Saber o que preciso comer e conseguir preparar as refeições com praticidade.
-Tem alguma doença ou algo do tipo?
-    Não

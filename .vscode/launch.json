@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "RUN",
+            "configurations": [
+                "Draw",
+            ],
+            "preLaunchTask": "build",
+            "stopAll": true
+        }
+    ],
+    "configurations": [
+        {
+            "name": "Draw",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "requireExactSource": false,
+            "cwd": "${workspaceFolder}/Draw",
+            "program": "${workspaceFolder}/Draw/bin/Debug/net9.0/Draw.dll",
+        }
+    ]
+}
