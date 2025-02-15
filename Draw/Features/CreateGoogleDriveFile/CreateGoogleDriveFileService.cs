@@ -1,39 +1,42 @@
-using System.Net.Http.Headers;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
+using Google.Apis.Auth.OAuth2;
 
 namespace OAuth.Draw.Features.CreateGoogleDriveFile;
 
-public class CreateGoogleDriveFileService(DrawDbContext ctx, IHttpClientFactory factory) : IDrawService
+public class CreateGoogleDriveFileService(DrawDbContext ctx) : IDrawService
 {
     public async Task<OneOf<string, DrawError>> Create(Guid userId, CreateGoogleDriveFileIn data)
     {
         var token = await ctx.Tokens.Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).FirstAsync();
 
         var memoryStream = new MemoryStream();
-        await using (var streamWriter = new StreamWriter(memoryStream))
+        await using var streamWriter = new StreamWriter(memoryStream);
+        await streamWriter.WriteAsync(data.Content);
+
+        streamWriter.Flush();
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        GoogleCredential credential = GoogleCredential
+            .FromAccessToken(token.AccessToken)
+            .CreateScoped(DriveService.Scope.Drive);
+
+        var service = new DriveService(new BaseClientService.Initializer
         {
-            await streamWriter.WriteAsync(data.Content);
+            ApplicationName = "Draw",
+            HttpClientInitializer = credential,
+        });
 
-            streamWriter.Flush();
-            memoryStream.Seek(0, SeekOrigin.Begin);
+        var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+        {
+            Name = data.Name
+        };
 
-            using var client = factory.CreateClient();
-            client.BaseAddress = new Uri("https://www.googleapis.com");
+        FilesResource.CreateMediaUpload request;
+        request = service.Files.Create(fileMetadata, memoryStream, "text/plain");
+        request.Fields = "id";
+        await request.UploadAsync();
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            var fileContent = new StreamContent(memoryStream);
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/plain");
-            var content = new MultipartFormDataContent
-            {
-                { fileContent, "file", data.Name }
-            };
-
-            var response = await client.PostAsync("upload/drive/v3/files?uploadType=media", content);
-            response.EnsureSuccessStatusCode();
-
-            string responseContent = await response.Content.ReadAsStringAsync();
-        }
-
-        return "ok";
+        return request.ResponseBody.Id;
     }
 }
