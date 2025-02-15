@@ -2,24 +2,20 @@ using OAuth.Draw.Configs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
-namespace OAuth.Draw.Features.AuthorizeGoogleDrive;
+namespace OAuth.Draw.Features.LoginWithGoogle;
 
 [Authorize]
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]
-public class AuthorizeGoogleDriveController : ControllerBase
+public class LoginWithGoogleController : ControllerBase
 {
     /// <summary>
-    /// Redireciona pro Google, onde o usuário pode permitir o acesso do Draw ao seu Drive
+    /// Autorizar Google Drive
     /// </summary>
     [HttpGet("oauth/google-drive")]
     public async Task Authorize()
     {
-        var properties = new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        };
-
+        var properties = new AuthenticationProperties { RedirectUri = "/" };
         await HttpContext.ChallengeAsync(AuthenticationConfigs.GoogleOAuthScheme, properties);
     }
 }

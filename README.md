@@ -176,8 +176,9 @@ ASSIM CONSIGO DEBUGAR TODOS OS PASSOS E VER TODAS AS INFORMAÇÕES
 - O que você deveria saber sobre Oauth 2.0 e OpenID! (https://youtu.be/68azMcqPpyo)
 - An Illustrated Guide to OAuth and OpenID Connect (https://youtu.be/t18YB3xDfXI)
 
-
+- An introduction to OpenID Connect in ASP.NET Core (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core)
 
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
 - How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
+
 

@@ -1,4 +1,7 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using OAuth.Draw.Features.CreateUser;
 using OAuth.Draw.Features.CreateUserOAuthToken;
 
 namespace OAuth.Draw.Configs;
@@ -7,6 +10,7 @@ public static class AuthenticationConfigs
 {
     public const string DrawCookieScheme = "DrawCookie";
     public const string GoogleOAuthScheme = "GoogleOAuth";
+    public const string GoogleOIDCScheme = "GoogleOIDC";
 
     public static void AddAuthenticationConfigs(this IServiceCollection services, IConfiguration configuration)
     {
@@ -34,7 +38,7 @@ public static class AuthenticationConfigs
                 options.ClientSecret = googleSettings.ClientSecret;
                 options.AuthorizationEndpoint = googleSettings.AuthorizationEndpoint;
                 options.TokenEndpoint = googleSettings.TokenEndpoint;
-                options.CallbackPath = googleSettings.CallbackPath;
+                options.CallbackPath = googleSettings.OAuthCallbackPath;
 
                 options.SaveTokens = true;
                 options.AdditionalAuthorizationParameters.Add("access_type", "offline");
@@ -65,6 +69,34 @@ public static class AuthenticationConfigs
                     ctx.Principal = user.Clone();
                     var identity = ctx.Principal.Identities.First(x => x.AuthenticationType == DrawCookieScheme);
                     identity.AddClaim(new("drv", "true"));
+                };
+            })
+            .AddOpenIdConnect(GoogleOIDCScheme, options =>
+            {
+                options.SignInScheme = DrawCookieScheme;
+
+                options.ClientId = googleSettings.ClientId;
+                options.ClientSecret = googleSettings.ClientSecret;
+                options.CallbackPath = googleSettings.OIDCCallbackPath;
+                options.Authority = googleSettings.OIDCAuthority;
+
+                options.Scope.Add(googleSettings.EmailScope);
+
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+
+                options.Events.OnUserInformationReceived = async ctx =>
+                {
+                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();
+                    var service = ctx.HttpContext.RequestServices.GetRequiredService<CreateUserService>();
+
+                    var user = ctx.Principal;
+                    var name = user.Claims.First(x => x.Type == "name").Value;
+                    var email = user.Claims.First(x => x.Type == ClaimTypes.Email).Value;
+                    var result = await service.Create(new(name, email, Guid.NewGuid().ToString()));
+
+                    await dbCtx.SaveChangesAsync();
                 };
             });
     }
