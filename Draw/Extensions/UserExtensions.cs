@@ -8,4 +8,10 @@ public static class UserExtensions
     {
         return Guid.Parse(user.FindFirstValue("sub")!);
     }
+
+    public static bool GoogleDriveEnabled(this ClaimsPrincipal user)
+    {
+        var claim = user.FindFirstValue("drv");
+        return claim == null ? false : bool.Parse(claim);
+    }
 }

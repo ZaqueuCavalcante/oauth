@@ -38,12 +38,6 @@ internal class RequestsExamples : IMultipleExamplesProvider<LoginIn>
                 "joao.da.silva@gmail.com",
                 "bfD43ae@8c46cb9fd18")
 		);
-        yield return SwaggerExample.Create(
-			"Gilbirdelson Lanches",
-			new LoginIn(
-                "gilbirdelson.lanches@gmail.com",
-                "dc9ab8a59@60b44edbcd71ba5Ec1a0f")
-		);
     }
 }
 

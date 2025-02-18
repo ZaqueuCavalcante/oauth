@@ -20,15 +20,18 @@ public static class AuthenticationConfigs
         services.AddAuthentication(DrawCookieScheme)
             .AddCookie(DrawCookieScheme, options =>
             {
-                var baseHandler = options.Events.OnRedirectToAccessDenied;
+                options.Events.OnRedirectToLogin = ctx =>
+                {
+                    ctx.Response.Clear();
+                    ctx.Response.StatusCode = 401;
+                    return Task.FromResult(0);
+                };
+
                 options.Events.OnRedirectToAccessDenied = ctx =>
                 {
-                    if (ctx.Request.Path.StartsWithSegments("/google-drive"))
-                    {
-                        return ctx.HttpContext.ChallengeAsync(GoogleOAuthScheme);
-                    }
-
-                    return baseHandler(ctx);
+                    ctx.Response.Clear();
+                    ctx.Response.StatusCode = 403;
+                    return Task.FromResult(0);
                 };
             })
             .AddOAuth(GoogleOAuthScheme, options =>
@@ -99,10 +102,7 @@ public static class AuthenticationConfigs
                     await createUserService.Create(new(name, email, Guid.NewGuid().ToString()));
 
                     var drawUser = await dbCtx.Users.FirstAsync(x => x.Email == email);
-                    var principal = loginService.GetClaimsPrincipal(drawUser);
-
-                    var properties = new AuthenticationProperties { RedirectUri = "/" };
-                    await ctx.HttpContext.SignInAsync(DrawCookieScheme, principal, properties);
+                    ctx.Principal = loginService.GetClaimsPrincipal(drawUser);
                 };
             });
     }
