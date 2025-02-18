@@ -8,7 +8,7 @@ namespace OAuth.Draw.Features.AuthorizeGoogleDrive;
 public class AuthorizeGoogleDriveController : ControllerBase
 {
     /// <summary>
-    /// Logar com Google
+    /// Login com Google
     /// </summary>
     [HttpGet("login/google")]
     public async Task LoginWithGoogle()

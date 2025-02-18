@@ -1,7 +1,5 @@
 using System.Reflection;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Interfaces;
 
 namespace OAuth.Draw.Configs;
 
@@ -19,19 +17,14 @@ public static class DocsConfigs
 
             options.EnableAnnotations();
 
+            options.TagActionsBy(api =>
+            {
+                return ["Endpoints"];
+            });
+
             options.DocInclusionPredicate((name, api) => true);
 
             options.ExampleFilters();
-
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Description = "Please enter a valid token",
-            });
 
             options.DescribeAllParametersInCamelCase();
 

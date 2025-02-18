@@ -10,7 +10,7 @@ namespace OAuth.Draw.Features.Login;
 public class LoginController(DrawDbContext ctx, IPasswordHasher hasher) : ControllerBase
 {
     /// <summary>
-    /// 🔓 Login
+    /// Login
     /// </summary>
     [HttpPost("login")]
     [ProducesResponseType(200)]
@@ -32,7 +32,6 @@ public class LoginController(DrawDbContext ctx, IPasswordHasher hasher) : Contro
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, AuthenticationConfigs.DrawCookieScheme);
-
         await HttpContext.SignInAsync(
             AuthenticationConfigs.DrawCookieScheme, 
             new ClaimsPrincipal(claimsIdentity));
@@ -46,13 +45,13 @@ internal class RequestsExamples : IMultipleExamplesProvider<LoginIn>
     public IEnumerable<SwaggerExample<LoginIn>> GetExamples()
     {
         yield return SwaggerExample.Create(
-			"Cliente - João da Silva",
+			"João da Silva",
 			new LoginIn(
                 "joao.da.silva@gmail.com",
                 "bfD43ae@8c46cb9fd18")
 		);
         yield return SwaggerExample.Create(
-			"Lojista - Gilbirdelson Lanches",
+			"Gilbirdelson Lanches",
 			new LoginIn(
                 "gilbirdelson.lanches@gmail.com",
                 "dc9ab8a59@60b44edbcd71ba5Ec1a0f")

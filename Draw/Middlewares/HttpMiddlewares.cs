@@ -18,13 +18,6 @@ public static class HttpMiddlewares
                 options.WithDownloadButton(false);
                 options.WithTitle("Draw API Docs");
                 options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
-                options
-                    .WithPreferredScheme("Bearer")
-                    .WithHttpBearerAuthentication(bearer =>
-                    {
-                        bearer.Token = "your.bearer.token";
-                    })
-                    .WithHttpBasicAuthentication(basic => {});
             });
         });
     }

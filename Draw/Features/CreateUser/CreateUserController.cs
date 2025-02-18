@@ -5,7 +5,7 @@ namespace OAuth.Draw.Features.CreateUser;
 public class CreateUserController(CreateUserService service) : ControllerBase
 {
     /// <summary>
-    /// 🔓 Criar usuário
+    /// Criar usuário
     /// </summary>
     [HttpPost("users")]
     [ProducesResponseType(typeof(CreateUserOut), 200)]

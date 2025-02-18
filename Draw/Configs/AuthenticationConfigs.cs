@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using OAuth.Draw.Features.CreateUser;
+using Microsoft.AspNetCore.Authentication;
 using OAuth.Draw.Features.CreateUserOAuthToken;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace OAuth.Draw.Configs;
 

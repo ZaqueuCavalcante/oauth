@@ -9,7 +9,7 @@ namespace OAuth.Draw.Features.CreateGoogleDriveFile;
 public class CreateGoogleDriveFileController(CreateGoogleDriveFileService service) : ControllerBase
 {
     /// <summary>
-    /// Cria um arquivo .txt no Google Drive
+    /// Criar arquivo
     /// </summary>
     [HttpPost("google-drive/files")]
     public async Task<IActionResult> Create([FromBody] CreateGoogleDriveFileIn data)
