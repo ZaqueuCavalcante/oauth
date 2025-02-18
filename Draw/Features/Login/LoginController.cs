@@ -1,13 +1,11 @@
 using OAuth.Draw.Configs;
-using OAuth.Draw.Security;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
 namespace OAuth.Draw.Features.Login;
 
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]
-public class LoginController(DrawDbContext ctx, IPasswordHasher hasher) : ControllerBase
+public class LoginController(LoginService service) : ControllerBase
 {
     /// <summary>
     /// Login
@@ -18,23 +16,13 @@ public class LoginController(DrawDbContext ctx, IPasswordHasher hasher) : Contro
     [SwaggerResponseExample(400, typeof(ErrorsExamples))]
     public async Task<IActionResult> Login([FromBody] LoginIn data)
     {
-        var user = await ctx.Users.FirstOrDefaultAsync(u => u.Email == data.Email);
-        if (user == null) return BadRequest(new UserNotFound());
+        var result = await service.Login(data);
 
-        var success = hasher.Verify(user.Id, user.Email, data.Password, user.PasswordHash);
-        if (!success) return BadRequest(new WrongPassword());
+        if (result.IsError()) return BadRequest(result.GetError());
 
-        var claims = new List<Claim>
-        {
-            new("sub", user.Id.ToString()),
-            new("name", user.Name),
-            new("email", user.Email),
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims, AuthenticationConfigs.DrawCookieScheme);
         await HttpContext.SignInAsync(
             AuthenticationConfigs.DrawCookieScheme, 
-            new ClaimsPrincipal(claimsIdentity));
+            result.GetSuccess());
 
         return LocalRedirect("/");
     }

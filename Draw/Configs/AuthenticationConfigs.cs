@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using OAuth.Draw.Features.Login;
 using OAuth.Draw.Features.CreateUser;
 using Microsoft.AspNetCore.Authentication;
 using OAuth.Draw.Features.CreateUserOAuthToken;
@@ -89,14 +90,19 @@ public static class AuthenticationConfigs
                 options.Events.OnUserInformationReceived = async ctx =>
                 {
                     var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();
-                    var service = ctx.HttpContext.RequestServices.GetRequiredService<CreateUserService>();
+                    var createUserService = ctx.HttpContext.RequestServices.GetRequiredService<CreateUserService>();
+                    var loginService = ctx.HttpContext.RequestServices.GetRequiredService<LoginService>();
 
                     var user = ctx.Principal;
                     var name = user.Claims.First(x => x.Type == "name").Value;
                     var email = user.Claims.First(x => x.Type == ClaimTypes.Email).Value;
-                    var result = await service.Create(new(name, email, Guid.NewGuid().ToString()));
+                    await createUserService.Create(new(name, email, Guid.NewGuid().ToString()));
 
-                    await dbCtx.SaveChangesAsync();
+                    var drawUser = await dbCtx.Users.FirstAsync(x => x.Email == email);
+                    var principal = loginService.GetClaimsPrincipal(drawUser);
+
+                    var properties = new AuthenticationProperties { RedirectUri = "/" };
+                    await ctx.HttpContext.SignInAsync(DrawCookieScheme, principal, properties);
                 };
             });
     }
