@@ -1,6 +1,6 @@
 using Dapper;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class EfCoreConfigs
 {
@@ -9,6 +9,6 @@ public static class EfCoreConfigs
         DefaultTypeMap.MatchNamesWithUnderscores = true;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        services.AddDbContext<DrawDbContext>();
+        services.AddDbContext<DrawAppDbContext>();
     }
 }

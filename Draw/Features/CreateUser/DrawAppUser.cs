@@ -1,6 +1,6 @@
-namespace OAuth.Draw.Features.CreateUser;
+namespace OAuth.DrawApp.Features.CreateUser;
 
-public class DrawUser
+public class DrawAppUser
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; }
@@ -8,9 +8,9 @@ public class DrawUser
     public string PasswordHash { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    private DrawUser() { }
+    private DrawAppUser() { }
 
-    public DrawUser(
+    public DrawAppUser(
         string name,
         string email
     ) {

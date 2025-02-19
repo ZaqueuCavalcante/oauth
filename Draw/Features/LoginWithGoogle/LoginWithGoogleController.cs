@@ -1,7 +1,7 @@
-using OAuth.Draw.Configs;
+using OAuth.DrawApp.Configs;
 using Microsoft.AspNetCore.Authentication;
 
-namespace OAuth.Draw.Features.AuthorizeGoogleDrive;
+namespace OAuth.DrawApp.Features.AuthorizeGoogleDrive;
 
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]

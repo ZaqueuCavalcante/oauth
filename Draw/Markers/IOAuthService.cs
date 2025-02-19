@@ -1,3 +1,3 @@
-namespace OAuth.Draw.Markers;
+namespace OAuth.DrawApp.Markers;
 
-public interface IDrawService;
+public interface IDrawAppService;

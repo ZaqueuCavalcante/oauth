@@ -1,11 +1,11 @@
-using OAuth.Draw.Features.CreateUser;
-using OAuth.Draw.Features.CreateUserOAuthToken;
+using OAuth.DrawApp.Features.CreateUser;
+using OAuth.DrawApp.Features.CreateUserOAuthToken;
 
-namespace OAuth.Draw.Database;
+namespace OAuth.DrawApp.Database;
 
-public class DrawDbContext(DbContextOptions<DrawDbContext> options, IConfiguration configuration) : DbContext(options)
+public class DrawAppDbContext(DbContextOptions<DrawAppDbContext> options, IConfiguration configuration) : DbContext(options)
 {
-    public DbSet<DrawUser> Users { get; set; }
+    public DbSet<DrawAppUser> Users { get; set; }
     public DbSet<UserOAuthToken> Tokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -18,7 +18,7 @@ public class DrawDbContext(DbContextOptions<DrawDbContext> options, IConfigurati
     {
         base.OnModelCreating(builder);
 
-        builder.HasDefaultSchema("draw");
+        builder.HasDefaultSchema("drawapp");
 
         builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }

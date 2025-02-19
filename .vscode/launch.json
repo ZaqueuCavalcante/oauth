@@ -4,7 +4,7 @@
         {
             "name": "RUN",
             "configurations": [
-                "Draw",
+                "DrawApp",
             ],
             "preLaunchTask": "build",
             "stopAll": true
@@ -12,13 +12,13 @@
     ],
     "configurations": [
         {
-            "name": "Draw",
+            "name": "DrawApp",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             "requireExactSource": false,
-            "cwd": "${workspaceFolder}/Draw",
-            "program": "${workspaceFolder}/Draw/bin/Debug/net9.0/Draw.dll",
+            "cwd": "${workspaceFolder}/DrawApp",
+            "program": "${workspaceFolder}/DrawApp/bin/Debug/net9.0/DrawApp.dll",
         }
     ]
 }

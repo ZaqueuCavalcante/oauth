@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class DocsConfigs
 {
@@ -11,7 +11,7 @@ public static class DocsConfigs
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Draw API Docs",
+                Title = "DrawApp API Docs",
                 Description = ReadResource("api-intro.md"),
             });
 
@@ -28,7 +28,7 @@ public static class DocsConfigs
 
             options.DescribeAllParametersInCamelCase();
 
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, "Draw.xml");
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, "DrawApp.xml");
             options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
         });
 

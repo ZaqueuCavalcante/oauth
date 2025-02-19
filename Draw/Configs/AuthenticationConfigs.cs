@@ -1,15 +1,15 @@
 using System.Security.Claims;
-using OAuth.Draw.Features.Login;
-using OAuth.Draw.Features.CreateUser;
+using OAuth.DrawApp.Features.Login;
+using OAuth.DrawApp.Features.CreateUser;
 using Microsoft.AspNetCore.Authentication;
-using OAuth.Draw.Features.CreateUserOAuthToken;
+using OAuth.DrawApp.Features.CreateUserOAuthToken;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class AuthenticationConfigs
 {
-    public const string DrawCookieScheme = "DrawCookie";
+    public const string DrawAppCookieScheme = "DrawAppCookie";
     public const string GoogleOAuthScheme = "GoogleOAuth";
     public const string GoogleOIDCScheme = "GoogleOIDC";
 
@@ -17,8 +17,8 @@ public static class AuthenticationConfigs
     {
         var googleSettings = configuration.Google();
 
-        services.AddAuthentication(DrawCookieScheme)
-            .AddCookie(DrawCookieScheme, options =>
+        services.AddAuthentication(DrawAppCookieScheme)
+            .AddCookie(DrawAppCookieScheme, options =>
             {
                 options.Events.OnRedirectToLogin = ctx =>
                 {
@@ -36,7 +36,7 @@ public static class AuthenticationConfigs
             })
             .AddOAuth(GoogleOAuthScheme, options =>
             {
-                options.SignInScheme = DrawCookieScheme;
+                options.SignInScheme = DrawAppCookieScheme;
 
                 options.ClientId = googleSettings.ClientId;
                 options.ClientSecret = googleSettings.ClientSecret;
@@ -52,15 +52,15 @@ public static class AuthenticationConfigs
 
                 options.Events.OnCreatingTicket = async ctx =>
                 {
-                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();
+                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawAppDbContext>();
 
                     var authHandlerProvider = ctx.HttpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
-                    var authHandler = await authHandlerProvider.GetHandlerAsync(ctx.HttpContext, DrawCookieScheme);
+                    var authHandler = await authHandlerProvider.GetHandlerAsync(ctx.HttpContext, DrawAppCookieScheme);
                     var authResult = await authHandler.AuthenticateAsync();
 
                     if (!authResult.Succeeded)
                     {
-                        ctx.Fail($"Fail {DrawCookieScheme} authentication");
+                        ctx.Fail($"Fail {DrawAppCookieScheme} authentication");
                         return;
                     }
 
@@ -71,13 +71,13 @@ public static class AuthenticationConfigs
                     await dbCtx.SaveChangesAsync();
 
                     ctx.Principal = user.Clone();
-                    var identity = ctx.Principal.Identities.First(x => x.AuthenticationType == DrawCookieScheme);
+                    var identity = ctx.Principal.Identities.First(x => x.AuthenticationType == DrawAppCookieScheme);
                     identity.AddClaim(new("drv", "true"));
                 };
             })
             .AddOpenIdConnect(GoogleOIDCScheme, options =>
             {
-                options.SignInScheme = DrawCookieScheme;
+                options.SignInScheme = DrawAppCookieScheme;
 
                 options.ClientId = googleSettings.ClientId;
                 options.ClientSecret = googleSettings.ClientSecret;
@@ -92,7 +92,7 @@ public static class AuthenticationConfigs
 
                 options.Events.OnUserInformationReceived = async ctx =>
                 {
-                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawDbContext>();
+                    var dbCtx = ctx.HttpContext.RequestServices.GetRequiredService<DrawAppDbContext>();
                     var createUserService = ctx.HttpContext.RequestServices.GetRequiredService<CreateUserService>();
                     var loginService = ctx.HttpContext.RequestServices.GetRequiredService<LoginService>();
 

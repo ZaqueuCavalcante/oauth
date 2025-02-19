@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.CreateUser;
+namespace OAuth.DrawApp.Features.CreateUser;
 
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class IdentityConfigs
 {

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class HttpConfigs
 {

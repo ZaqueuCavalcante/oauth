@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Auth;
+namespace OAuth.DrawApp.Auth;
 
 public static class Policies
 {

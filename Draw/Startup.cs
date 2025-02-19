@@ -1,7 +1,7 @@
-using OAuth.Draw.Configs;
-using OAuth.Draw.Middlewares;
+using OAuth.DrawApp.Configs;
+using OAuth.DrawApp.Middlewares;
 
-namespace OAuth.Draw;
+namespace OAuth.DrawApp;
 
 public class Startup(IConfiguration configuration)
 {
@@ -22,7 +22,7 @@ public class Startup(IConfiguration configuration)
         services.AddDocsConfigs();
     }
 
-    public static void Configure(IApplicationBuilder app, DrawDbContext ctx)
+    public static void Configure(IApplicationBuilder app, DrawAppDbContext ctx)
     {
         ctx.ResetDb();
 

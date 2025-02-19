@@ -1,6 +1,6 @@
-using OAuth.Draw.Security;
+using OAuth.DrawApp.Security;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class SecurityConfigs
 {

@@ -1,7 +1,7 @@
-using OAuth.Draw.Auth;
+using OAuth.DrawApp.Auth;
 using Microsoft.AspNetCore.Authorization;
 
-namespace OAuth.Draw.Features.CreateGoogleDriveFile;
+namespace OAuth.DrawApp.Features.CreateGoogleDriveFile;
 
 [ApiController]
 [Authorize(Policies.GoogleDriveEnabled)]

@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Security;
+namespace OAuth.DrawApp.Security;
 
 public interface IPasswordHasher
 {

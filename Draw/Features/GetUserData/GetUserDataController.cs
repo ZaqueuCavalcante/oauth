@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace OAuth.Draw.Features.GetUserData;
+namespace OAuth.DrawApp.Features.GetUserData;
 
 [Authorize]
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]
-public class GetUserDataController(DrawDbContext ctx) : ControllerBase
+public class GetUserDataController(DrawAppDbContext ctx) : ControllerBase
 {
     /// <summary>
     /// Dados do usuário

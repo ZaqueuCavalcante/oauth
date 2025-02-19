@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Extensions;
+namespace OAuth.DrawApp.Extensions;
 
 public static class ResultExtensions
 {

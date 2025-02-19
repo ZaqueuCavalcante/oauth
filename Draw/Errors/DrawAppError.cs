@@ -1,6 +1,6 @@
-namespace OAuth.Draw.Errors;
+namespace OAuth.DrawApp.Errors;
 
-public abstract class DrawError
+public abstract class DrawAppError
 {
     public abstract string Code { get; set; }
     public abstract string Message { get; set; }

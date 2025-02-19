@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.CreateUser;
+namespace OAuth.DrawApp.Features.CreateUser;
 
 public class CreateUserIn
 {

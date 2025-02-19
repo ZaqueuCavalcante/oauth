@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.Login;
+namespace OAuth.DrawApp.Features.Login;
 
 public class LoginIn
 {

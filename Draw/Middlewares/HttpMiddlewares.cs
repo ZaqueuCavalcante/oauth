@@ -1,6 +1,6 @@
 using Scalar.AspNetCore;
 
-namespace OAuth.Draw.Middlewares;
+namespace OAuth.DrawApp.Middlewares;
 
 public static class HttpMiddlewares
 {
@@ -16,7 +16,7 @@ public static class HttpMiddlewares
             {
                 options.WithModels(false);
                 options.WithDownloadButton(false);
-                options.WithTitle("Draw API Docs");
+                options.WithTitle("DrawApp API Docs");
                 options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
             });
         });

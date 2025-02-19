@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Errors;
+namespace OAuth.DrawApp.Errors;
 
 public class ErrorOut
 {

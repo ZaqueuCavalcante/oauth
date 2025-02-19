@@ -1,12 +1,12 @@
-using OAuth.Draw.Security;
+using OAuth.DrawApp.Security;
 
-namespace OAuth.Draw.Features.CreateUser;
+namespace OAuth.DrawApp.Features.CreateUser;
 
-public class CreateUserService(DrawDbContext ctx, IPasswordHasher hasher) : IDrawService
+public class CreateUserService(DrawAppDbContext ctx, IPasswordHasher hasher) : IDrawAppService
 {
-    public async Task<OneOf<CreateUserOut, DrawError>> Create(CreateUserIn data)
+    public async Task<OneOf<CreateUserOut, DrawAppError>> Create(CreateUserIn data)
     {
-        var user = new DrawUser(data.Name, data.Email);
+        var user = new DrawAppUser(data.Name, data.Email);
 
         var passwordHash = hasher.Hash(user.Id, user.Email, data.Password);
         user.SetPasswordHash(passwordHash);

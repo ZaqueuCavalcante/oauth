@@ -1,13 +1,13 @@
-using OAuth.Draw.Configs;
-using OAuth.Draw.Security;
+using OAuth.DrawApp.Configs;
+using OAuth.DrawApp.Security;
 using System.Security.Claims;
-using OAuth.Draw.Features.CreateUser;
+using OAuth.DrawApp.Features.CreateUser;
 
-namespace OAuth.Draw.Features.Login;
+namespace OAuth.DrawApp.Features.Login;
 
-public class LoginService(DrawDbContext ctx, IPasswordHasher hasher) : IDrawService
+public class LoginService(DrawAppDbContext ctx, IPasswordHasher hasher) : IDrawAppService
 {
-    public async Task<OneOf<ClaimsPrincipal, DrawError>> Login(LoginIn data)
+    public async Task<OneOf<ClaimsPrincipal, DrawAppError>> Login(LoginIn data)
     {
         var user = await ctx.Users.FirstOrDefaultAsync(u => u.Email == data.Email);
         if (user == null) return new UserNotFound();
@@ -18,7 +18,7 @@ public class LoginService(DrawDbContext ctx, IPasswordHasher hasher) : IDrawServ
         return GetClaimsPrincipal(user);
     }
 
-    public ClaimsPrincipal GetClaimsPrincipal(DrawUser user)
+    public ClaimsPrincipal GetClaimsPrincipal(DrawAppUser user)
     {
         var claims = new List<Claim>
         {
@@ -27,7 +27,7 @@ public class LoginService(DrawDbContext ctx, IPasswordHasher hasher) : IDrawServ
             new("email", user.Email),
         };
 
-        var claimsIdentity = new ClaimsIdentity(claims, AuthenticationConfigs.DrawCookieScheme);
+        var claimsIdentity = new ClaimsIdentity(claims, AuthenticationConfigs.DrawAppCookieScheme);
         return new ClaimsPrincipal(claimsIdentity);
     }
 }

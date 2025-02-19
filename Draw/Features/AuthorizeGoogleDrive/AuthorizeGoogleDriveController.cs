@@ -1,8 +1,8 @@
-using OAuth.Draw.Configs;
+using OAuth.DrawApp.Configs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
-namespace OAuth.Draw.Features.LoginWithGoogle;
+namespace OAuth.DrawApp.Features.LoginWithGoogle;
 
 [Authorize]
 [ApiController]

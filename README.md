@@ -74,84 +74,64 @@ Seguem os principais passos para realizar esse setup inicial:
     - ClientId                 -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
     - ClientSecret             -> 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
 
-* Sim, essas credenciais são reais, mas eu já apaguei elas lá do Google Cloud antes subir o código aqui pro GitHub.
+* Sim, essas credenciais são reais, mas eu já apaguei elas do Google Cloud antes subir o código aqui pro GitHub.
 
+## 3️⃣ Autorização com OAuth 2.0
 
+Vamos voltar pro primeiro cenário apresentado lá no começo:
 
+Você vai se cadastrar no DrawApp, informar nome e email, confirmar seu email, definir sua senha e enfim logar no sistema.
+O DrawApp possui integração com o Google Drive, o que permite que você salve seus diagramas na nuvem e os acesse de qualquer lugar.
+Mas como você pode habilitar essa funcionalidade de maneira simples e segura?
+Como garantir que o DrawApp vai poder acessar apenas os arquivos que você **autorizar**?
+E indo além, como posso revogar o acesso do DrawApp ao meu Drive?
 
+Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de autorização.
 
+Vamos definir alguns termos antes:
 
-## OAuth2
-
-- Protocolo de Autorização
-
-- Problema:
-    - Estou no draw.io e quero salvar meus diagramas no Google Drive
-    - Obviamente não quero informar pro draw.io meu email e senha do Google
-    - Como resolver isso? Como dar acesso limitado pro draw.io para que ele possa APENAS salvar e buscar dados no meu Google Drive
-    - Como posso revogar o acesso do draw.io?
-    - O draw.io pode acessar pastas ou documentos privados?
-    - Ele pode deletar todos os meus dados?
-    - Permissão GRANULAR!
-
-- Setup inicial
-    - Cadastrar minha aplicacao no Google
-        - ClientId
-        - ClientSecret
-        - Callback URI
-        - Scopes
-
-- Terminologia
-    - Resource Owner
-        - Eu, o dono das pastas/arquivos que estão no Drive
-    - Client
-        - Draw.io, a aplicação que está pedindo acesso ao meus recursos
-    - Authorization Server
-        - Servidor do Google que pergunta se quero deixar o draw.io acessar meus dados
-        - Ele conhece meu email e minha senha (hash)
-        - Ele conhece o draw.io (id + secret)
-        - Ele conhece o Google Drive
-        - Ele pode emitir tokens de acesso, usados para ler/salvar dados no Drive
-    - Resource Server
-        - Google Drive, onde estão meus recursos (pastas e arquivos)
-    - Authorization Grant
-        - Flows -> Code | Implicit | Password Credentials | Client Credentials
-        - Response Type
-        - Response Mode
-        - Code que prova que eu permiti o acesso do draw.io ao meu Drive
-        - O que o draw.io espera receber no callback quando o usuário permitir seu acesso ao Drive
-        - Usado no backend pelo draw.io para conseguir um JWT, que dá acesso ao Drive do usuário
-    - Redirect URI
-        - Callback URI (fica no draw.io)
-        - URI que o draw.io usa para pegar o token gerado no Authorization Server quando o usuário permite
-    - Access Token
-        - JWT usado pelo draw.io para realizar a comunicação backend com o Drive (ler e salvar arquivos)
-    - Scope
-        - Permissões que o token possui
-        - Ex: criar arquivos numa pasta / ler arquivos de uma pasta / deletar pasta
-        - Elas sao mostradas na tela de consentimento, quando o auth server perguntar se quero dar permissao
-    - State
-        - Prova que eu iniciei e terminei o fluxo?
-    - Nonce
-
-    - Front Channel
-        - Comunicacao via frontend (acontece no navegador) MENOS SEGURO
-        - Onde ocorre todo o fluxo ate a obtencao do Authorization Grant (code)
-    - Back Channel
-        - Comunicacao via backend (server -> server) HTTPS / ALTAMENTE SEGURO
-
-
-
-
-
+- Resource Owner
+    - O usuário, dono da conta no Google Drive
+- Client
+    - DrawApp, a aplicação que está pedindo acesso ao meus recursos
+- Authorization Server
+    - Servidor do Google que pergunta se quero deixar o draw.io acessar meus dados
+    - Ele conhece meu email e minha senha (hash)
+    - Ele conhece o draw.io (id + secret)
+    - Ele conhece o Google Drive
+    - Ele pode emitir tokens de acesso, usados para ler/salvar dados no Drive
+- Resource Server
+    - Google Drive, onde estão meus recursos (pastas e arquivos)
+- Authorization Grant
+    - Flows -> Code | Implicit | Password Credentials | Client Credentials
+    - Response Type
+    - Response Mode
+    - Code que prova que eu permiti o acesso do draw.io ao meu Drive
+    - O que o draw.io espera receber no callback quando o usuário permitir seu acesso ao Drive
+    - Usado no backend pelo draw.io para conseguir um JWT, que dá acesso ao Drive do usuário
+- Redirect URI
+    - Callback URI (fica no draw.io)
+    - URI que o draw.io usa para pegar o token gerado no Authorization Server quando o usuário permite
+- Access Token
+    - JWT usado pelo draw.io para realizar a comunicação backend com o Drive (ler e salvar arquivos)
+- Scope
+    - Permissões que o token possui
+    - Ex: criar arquivos numa pasta / ler arquivos de uma pasta / deletar pasta
+    - Elas sao mostradas na tela de consentimento, quando o auth server perguntar se quero dar permissao
+- State
+    - Prova que eu iniciei e terminei o fluxo?
+- Nonce
+    - String aleatória
+- Front Channel
+    - Comunicacao via frontend (acontece no navegador) MENOS SEGURO
+    - Onde ocorre todo o fluxo ate a obtencao do Authorization Grant (code)
+- Back Channel
+    - Comunicacao via backend (server -> server) HTTPS / ALTAMENTE SEGURO
 - PKCE (Proof Key for Code Exchange)
-
 - Scopes
     - id, name, email...
-
 - Flows
     - Authorization Code
-    - 
 
 
 
@@ -168,28 +148,12 @@ Seguem os principais passos para realizar esse setup inicial:
 
 
 
-## Cookies
 
-- Set-Cookie Header
-
-
-## Autenticacao
-
-- Via ApiKey, JWT, Cookie...
-- Logar com Google, GitHub, Facebook...
-- Apresento credenciais e recebo um token/cookie/key de acesso
-
-- Possui varios Schemas (Cookie, Bearer, OAuth)
 
 ## Referências
 
 - OAuth 2.0 and OpenID Connect (in plain English) (https://youtu.be/996OiexHze0)
-- O que você deveria saber sobre Oauth 2.0 e OpenID! (https://youtu.be/68azMcqPpyo)
 - An Illustrated Guide to OAuth and OpenID Connect (https://youtu.be/t18YB3xDfXI)
-
-- An introduction to OpenID Connect in ASP.NET Core (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core)
-
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
+- An introduction to OpenID Connect in ASP.NET Core (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core)
 - How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
-
-

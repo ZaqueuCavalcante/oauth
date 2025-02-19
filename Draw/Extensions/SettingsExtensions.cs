@@ -1,6 +1,6 @@
-using OAuth.Draw.Settings;
+using OAuth.DrawApp.Settings;
 
-namespace OAuth.Draw.Extensions;
+namespace OAuth.DrawApp.Extensions;
 
 public static class SettingsExtensions
 {

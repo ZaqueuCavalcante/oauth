@@ -1,16 +1,16 @@
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class ServicesConfigs
 {
     public static void AddServicesConfigs(this IServiceCollection services)
     {
-        services.AddServiceConfigs(typeof(IDrawService));
+        services.AddServiceConfigs(typeof(IDrawAppService));
     }
 
     private static void AddServiceConfigs(this IServiceCollection services, Type marker)
     {
         var types = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(s => s.FullName.StartsWith("Draw"))
+            .Where(s => s.FullName.StartsWith("DrawApp"))
             .SelectMany(s => s.GetTypes())
             .Where(p => marker.IsAssignableFrom(p) && !p.IsInterface)
             .ToList();

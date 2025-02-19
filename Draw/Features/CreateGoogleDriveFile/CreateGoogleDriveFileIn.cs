@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.CreateGoogleDriveFile;
+namespace OAuth.DrawApp.Features.CreateGoogleDriveFile;
 
 public class CreateGoogleDriveFileIn
 {

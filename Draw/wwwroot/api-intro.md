@@ -1,5 +1,5 @@
 ## ▶️ Introdução
 
-Essa é a documentação oficial da API do Draw!
+Essa é a documentação oficial da API do DrawApp!
 
-Repositório: [Draw ↗️](https://github.com/ZaqueuCavalcante/oauth)
+Repositório: [DrawApp ↗️](https://github.com/ZaqueuCavalcante/oauth)

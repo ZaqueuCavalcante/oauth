@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.CreateUserOAuthToken;
+namespace OAuth.DrawApp.Features.CreateUserOAuthToken;
 
 public class UserOAuthToken
 {

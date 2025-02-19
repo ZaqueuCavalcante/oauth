@@ -1,7 +1,7 @@
-using OAuth.Draw.Auth;
+using OAuth.DrawApp.Auth;
 using Microsoft.AspNetCore.Authorization;
 
-namespace OAuth.Draw.Configs;
+namespace OAuth.DrawApp.Configs;
 
 public static class AuthorizationConfigs
 {
@@ -13,7 +13,7 @@ public static class AuthorizationConfigs
     public static void AddPolicies(this AuthorizationOptions options)
     {
         options.AddPolicy(Policies.GoogleDriveEnabled, p => p
-            .AddAuthenticationSchemes(AuthenticationConfigs.DrawCookieScheme)
+            .AddAuthenticationSchemes(AuthenticationConfigs.DrawAppCookieScheme)
             .RequireAuthenticatedUser()
             .RequireClaim("drv", "true"));
     }

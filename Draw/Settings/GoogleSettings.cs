@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Settings;
+namespace OAuth.DrawApp.Settings;
 
 public class GoogleSettings
 {

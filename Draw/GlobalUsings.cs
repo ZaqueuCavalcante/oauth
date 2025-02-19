@@ -1,8 +1,8 @@
 global using OneOf;
-global using OAuth.Draw.Errors;
-global using OAuth.Draw.Markers;
-global using OAuth.Draw.Database;
-global using OAuth.Draw.Extensions;
+global using OAuth.DrawApp.Errors;
+global using OAuth.DrawApp.Markers;
+global using OAuth.DrawApp.Database;
+global using OAuth.DrawApp.Extensions;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Swashbuckle.AspNetCore.Filters;

@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.GetUserData;
+namespace OAuth.DrawApp.Features.GetUserData;
 
 public class GetUserDataOut
 {

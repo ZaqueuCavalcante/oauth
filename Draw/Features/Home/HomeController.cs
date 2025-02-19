@@ -1,4 +1,4 @@
-namespace OAuth.Draw.Features.Home;
+namespace OAuth.DrawApp.Features.Home;
 
 [ApiController]
 [ApiExplorerSettings(IgnoreApi = true)]

@@ -1,8 +1,8 @@
-namespace OAuth.Draw.Features.CreateUser;
+namespace OAuth.DrawApp.Features.CreateUser;
 
-public class DrawUserConfig : IEntityTypeConfiguration<DrawUser>
+public class DrawAppUserConfig : IEntityTypeConfiguration<DrawAppUser>
 {
-    public void Configure(EntityTypeBuilder<DrawUser> user)
+    public void Configure(EntityTypeBuilder<DrawAppUser> user)
     {
         user.ToTable("users");
 

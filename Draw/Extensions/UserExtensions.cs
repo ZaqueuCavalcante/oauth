@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace OAuth.Draw.Extensions;
+namespace OAuth.DrawApp.Extensions;
 
 public static class UserExtensions
 {

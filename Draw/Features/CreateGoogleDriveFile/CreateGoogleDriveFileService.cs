@@ -2,11 +2,11 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Auth.OAuth2;
 
-namespace OAuth.Draw.Features.CreateGoogleDriveFile;
+namespace OAuth.DrawApp.Features.CreateGoogleDriveFile;
 
-public class CreateGoogleDriveFileService(DrawDbContext ctx) : IDrawService
+public class CreateGoogleDriveFileService(DrawAppDbContext ctx) : IDrawAppService
 {
-    public async Task<OneOf<string, DrawError>> Create(Guid userId, CreateGoogleDriveFileIn data)
+    public async Task<OneOf<string, DrawAppError>> Create(Guid userId, CreateGoogleDriveFileIn data)
     {
         var token = await ctx.Tokens.Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).FirstAsync();
 
@@ -23,7 +23,7 @@ public class CreateGoogleDriveFileService(DrawDbContext ctx) : IDrawService
 
         var service = new DriveService(new BaseClientService.Initializer
         {
-            ApplicationName = "Draw",
+            ApplicationName = "DrawApp",
             HttpClientInitializer = credential,
         });
 

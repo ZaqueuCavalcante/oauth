@@ -1,7 +1,7 @@
-using OAuth.Draw.Configs;
+using OAuth.DrawApp.Configs;
 using Microsoft.AspNetCore.Authentication;
 
-namespace OAuth.Draw.Features.Login;
+namespace OAuth.DrawApp.Features.Login;
 
 [ApiController]
 [Consumes("application/json"), Produces("application/json")]
@@ -21,7 +21,7 @@ public class LoginController(LoginService service) : ControllerBase
         if (result.IsError()) return BadRequest(result.GetError());
 
         await HttpContext.SignInAsync(
-            AuthenticationConfigs.DrawCookieScheme, 
+            AuthenticationConfigs.DrawAppCookieScheme, 
             result.GetSuccess());
 
         return LocalRedirect("/");

@@ -1,4 +1,4 @@
-namespace OAuth.Draw;
+namespace OAuth.DrawApp;
 
 public static class Program
 {
