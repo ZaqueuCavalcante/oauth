@@ -1,4 +1,4 @@
-# OAuth 2.0 + OpenID Connect
+# OAuth 2.0 + OpenID Connect (OIDC)
 
 O objetivo desse projeto é mostrar na prática o uso dos protocolos OAuth 2.0 e OpenID Connect.
 
@@ -17,13 +17,14 @@ Resposta: usando o OpenID Connect!
 
 ## Sumário
 ### 1️⃣ Simulando o Draw.io
-
+### 2️⃣ Setup Inicial
 
 
 
 ## 1️⃣ Simulando o Draw.io
 
 Para ver na prática como esses protocolos funcionam, criei uma API em .NET bem simples, que vai simular a aplicação do Draw.io nos dois cenários descritos anteriormente.
+Vou me referir a essa API como DrawApp de agora em diante.
 
 Ela possui os seguintes endpoints:
 - POST /users
@@ -38,79 +39,44 @@ Ela possui os seguintes endpoints:
 
 - GET /oauth/google-drive
     - Redireciona o usuário logado para a tela de consenso do Google
-    - Nela o usuário pode autorizar que a API salve dados no seu Google Drive
+    - Nela o usuário pode autorizar que o DrawApp salve dados no seu Google Drive
 - POST /google-drive/files
     - Permite a criação de arquivos no Google Drive do usuário, caso ele tenha autorizado o acesso usando o endpoint anterior
 
 - GET /login/google
     - Redireciona o usuário deslogado para a tela de consenso do Google
-    - Nela o usuário pode autorizar que a API tenha acesso ao seu nome, email e foto de perfil
+    - Nela o usuário pode autorizar que o DrawApp tenha acesso ao seu nome, email e foto de perfil
     - Se o usuário permitir, a API automaticamente realiza seu cadastro e o loga no sistema
 
+Estou usando o Postgres para salvar todos os dados do DrawApp.
 
+## 2️⃣ Setup Inicial
 
+Antes de mais nada, é razoável pensar que o DrawApp precise estar previamente configurado no Google para que tudo isso funcione.
+Afinal, quando o usuário é redirecionado pra tela de consenso, o Google já conhece o DrawApp e sabe quais permissões ele deseja obter do usuário.
 
-
-
-
-
-
-
-
-
-É uma API que vai simular o app draw.io
-
-Essa API possui autenticação via JWT. É possível criar um usuário e logar com ele, recebendo um JWT gerado pela própria API.
-
-Com o usuário logado, vamo fazer nossa API ter acesso ao Google Drive do usuário usando o OAuth.
-
-Também vamos realizar o famoso Login com Google, usando o OIDC. Assim o usuário vai poder logar direto na API, sem a necessidade de realizar um cadastro antes.
-
-
-
-## Setup Inicial
-
-- Criar projeto no Google Cloud
-
-- Habilitar o acesso do Draw a API do Google Drive
-
-- Configurar projeto com nome Draw e domínio draw.host (aponta pro localhost)
-
+Seguem os principais passos para realizar esse setup inicial:
+- Criar projeto no Google Cloud e configurar seu nome como DrawApp
+- Habilitar o acesso do DrawApp à API do Google Drive
 - Adicionar meu email como usuário de teste
 
-- Adicionar escopo de acesso ao Google Drive que o Draw vai pedir pro usuário
-    - https://www.googleapis.com/auth/drive.file
-    - Create new Drive files, or modify existing files, that you open with an app or that the user shares with an app while using the Google Picker API or the app's file picker.
-    - See, edit, create, and delete only the specific Google Drive files you use with this app
+- Adicionar escopo de acesso ao Google Drive que o DrawApp vai pedir pro usuário no fluxo de autorização (OAuth 2.0)
+    - Vamos usar o escopo "drive.file", que permite **apenas** a criação/edição de arquivos que o usuário utilizou no DrawApp
 
-- Adicionar escopo do OIDC para fazermos login depois
-    - openid
-    - Associate you with your personal info on Google
+- Adicionar escopos para que o DrawApp tenha acesso aos dados necessários para realizar o login via conta Google
+    - Aqui vamos usar os escopos "openid" e "userinfo.email"
+    - Eles juntos retornam dados pessoais do usuário, como nome, email e foto de perfil
 
 - Dentro do projeto, criar nossas credenciais:
-    - URI de origem -> http://localhost:5001
-    - URI de redirect -> http://localhost:5001/oauth/draw-callback
-    - ClientId -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
-    - ClientSecret -> Lalala@123
+    - URI de origem            -> http://localhost:5001
+    - URI de callback do OAuth -> http://localhost:5001/oauth/drawapp-callback
+    - URI de callback do OIDC  -> http://localhost:5001/oidc/drawapp-callback
+    - ClientId                 -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
+    - ClientSecret             -> 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
+
+* Sim, essas credenciais são reais, mas eu já apaguei elas lá do Google Cloud antes subir o código aqui pro GitHub.
 
 
-
-
-
-
-
-
-- OAuth2 serve para autorizar em outro sistema (acesso limitado)
-    - Estou no draw.io e quero salvar meus diagramas no Google Drive
-
-- OpenID Connect serve para se autenticar no sistema A, usando uma conta no sistema B
-    - Extensão do OAuth2, traz dados (IdToken, /userinfo) sobre o usuário além do token de acesso
-    - Quero logar no Syki usando minha conta do Google/LinkedIn/GitHub...
-
-CRIAR UMA API EM .NET PARA SIMULAR O DRAW.IO
-ASSIM CONSIGO DEBUGAR TODOS OS PASSOS E VER TODAS AS INFORMAÇÕES
-
-- Trocar draw.io pelos contatos que tenho no gmail?
 
 
 
