@@ -1,17 +1,62 @@
-# OAuth 2.0 + OpenID Connect (OIDC)
+# OAuth 2.0 + OpenID Connect
 
-O objetivo desse projeto é mostrar a implementação prática dos protocolos OAuth 2.0 e OpenID Connect.
+O objetivo desse projeto é mostrar na prática o uso dos protocolos OAuth 2.0 e OpenID Connect.
 
-Ele consiste de uma API, que vai simular uma aplicação qualquer.
+Para facilitar o entendimento, vamos supor que você quer usar uma aplicação web para desenhar diagramas de arquitetura de software, como o Draw.io.
 
-No primeiro caso, vamos fazer nossa API obter acesso a uma pasta no Google Drive, através do fluxo de autorização fornecido pelo OAuth.
+No primeiro cenário, você vai se cadastrar na aplicação, informar nome e email, confirmar seu email, definir sua senha e enfim logar no sistema.
+O Draw.io possui integração com o Google Drive, o que permite que você salve seus diagramas na nuvem e os acesse de qualquer lugar.
+Mas como você pode habilitar essa funcionalidade de maneira simples e segura?
+Como garantir que o Draw.io vai poder acessar apenas os arquivos que você **autorizar**?
+Resposta: usando o OAuth 2.0!
 
-No segundo, vamos realizar o login na nossa API através de uma conta Google, através do OIDC.
+No segundo cenário, suponha que você não quer passar por todo o fluxo de se cadastrar no sistema, confirmar seu email, definir senha e só então logar no app.
+Afinal, você já está logado na sua conta Google, poderia muito bem usar ela para se **autenticar** no Draw.io.
+Mas novamente, como isso pode ser feito, de maneira simples e segura?
+Resposta: usando o OpenID Connect!
 
 ## Sumário
+### 1️⃣ Simulando o Draw.io
 
 
-## Draw
+
+
+## 1️⃣ Simulando o Draw.io
+
+Para ver na prática como esses protocolos funcionam, criei uma API em .NET bem simples, que vai simular a aplicação do Draw.io nos dois cenários descritos anteriormente.
+
+Ela possui os seguintes endpoints:
+- POST /users
+    - Cria um usuário, informando nome, email e senha
+- POST /login
+    - Realiza o login no sistema, informando email e senha
+    - A autenticação é feita via Cookie
+
+- GET /users/data
+    - Retorna alguns dados do usuário logado
+    - Sendo eles nome, email e se a integração com o Google Drive está ativada
+
+- GET /oauth/google-drive
+    - Redireciona o usuário logado para a tela de consenso do Google
+    - Nela o usuário pode autorizar que a API salve dados no seu Google Drive
+- POST /google-drive/files
+    - Permite a criação de arquivos no Google Drive do usuário, caso ele tenha autorizado o acesso usando o endpoint anterior
+
+- GET /login/google
+    - Redireciona o usuário deslogado para a tela de consenso do Google
+    - Nela o usuário pode autorizar que a API tenha acesso ao seu nome, email e foto de perfil
+    - Se o usuário permitir, a API automaticamente realiza seu cadastro e o loga no sistema
+
+
+
+
+
+
+
+
+
+
+
 
 É uma API que vai simular o app draw.io
 
