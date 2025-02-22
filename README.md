@@ -114,6 +114,10 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 
 ### Segue o fluxo de registro e login no sistema
 
+<p align="center">
+  <img src="./DrawApp/Docs/01_register_and_login.gif" width="800" style="display: block; margin: 0 auto" />
+</p>
+
 0️⃣ Usuário informa nome + email ao DrawApp
 
 1️⃣ Sistema gera token para definição de senha e o envia pra email informado
@@ -123,10 +127,6 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 3️⃣ Usuário agora informa email + senha pra logar no app
 
 4️⃣ DrawApp gera um Cookie de autenticação e retorna ele pro navegador do usuário
-
-<p align="center">
-  <img src="./DrawApp/Docs/01_register_and_login.gif" width="800" style="display: block; margin: 0 auto" />
-</p>
 
 ### Uma vez logado, agora o usuário pode habilitar a integração com o Google Drive
 
