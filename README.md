@@ -8,12 +8,10 @@ No primeiro cenário, você vai se cadastrar na aplicação, informar nome e ema
 O Draw.io possui integração com o Google Drive, o que permite que você salve seus diagramas na nuvem e os acesse de qualquer lugar.
 Mas como você pode habilitar essa funcionalidade de maneira simples e segura?
 Como garantir que o Draw.io vai poder acessar apenas os arquivos que você **autorizar**?
-Resposta: usando o OAuth 2.0!
 
 No segundo cenário, suponha que você não quer passar por todo o fluxo de se cadastrar no sistema, confirmar seu email, definir senha e só então logar no app.
 Afinal, você já está logado na sua conta Google, poderia muito bem usar ela para se **autenticar** no Draw.io.
 Mas novamente, como isso pode ser feito, de maneira simples e segura?
-Resposta: usando o OpenID Connect!
 
 ## Sumário
 - 1️⃣ Simulando o Draw.io
