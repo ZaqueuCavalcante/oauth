@@ -2,7 +2,7 @@
 
 O objetivo desse projeto é mostrar na prática o uso dos protocolos OAuth 2.0 e OpenID Connect.
 
-Para facilitar o entendimento, vamos supor que você quer usar uma aplicação web para desenhar diagramas de arquitetura de software, como o Draw.io.
+Para facilitar o entendimento, vamos supor que você quer usar uma aplicação web para desenhar diagramas, como o Draw.io.
 
 No primeiro cenário, você vai se cadastrar na aplicação, informar nome e email, confirmar seu email, definir sua senha e enfim logar no sistema.
 O Draw.io possui integração com o Google Drive, o que permite que você salve seus diagramas na nuvem e os acesse de qualquer lugar.
@@ -16,10 +16,11 @@ Mas novamente, como isso pode ser feito, de maneira simples e segura?
 Resposta: usando o OpenID Connect!
 
 ## Sumário
-### 1️⃣ Simulando o Draw.io
-### 2️⃣ Setup Inicial
-
-
+- 1️⃣ Simulando o Draw.io
+- 2️⃣ Setup Inicial
+- 3️⃣ Autorização com OAuth 2.0
+- 4️⃣ Autenticação com OpenID Connect (OIDC)
+- 5️⃣ Referências
 
 ## 1️⃣ Simulando o Draw.io
 
@@ -34,8 +35,7 @@ Ela possui os seguintes endpoints:
     - A autenticação é feita via Cookie
 
 - GET /users/data
-    - Retorna alguns dados do usuário logado
-    - Sendo eles nome, email e se a integração com o Google Drive está ativada
+    - Retorna alguns dados do usuário logado: nome, email e se a integração com o Google Drive está ativada
 
 - GET /oauth/google-drive
     - Redireciona o usuário logado para a tela de consenso do Google
@@ -45,8 +45,12 @@ Ela possui os seguintes endpoints:
 
 - GET /login/google
     - Redireciona o usuário deslogado para a tela de consenso do Google
-    - Nela o usuário pode autorizar que o DrawApp tenha acesso ao seu nome, email e foto de perfil
+    - Nela o usuário pode autorizar que o DrawApp tenha acesso ao seu nome e email
     - Se o usuário permitir, a API automaticamente realiza seu cadastro e o loga no sistema
+
+<p align="center">
+  <img src="./DrawApp/Docs/00_draw_app_api.gif" width="800" style="display: block; margin: 0 auto" />
+</p>
 
 Estou usando o Postgres para salvar todos os dados do DrawApp.
 
@@ -63,18 +67,15 @@ Seguem os principais passos para realizar esse setup inicial:
 - Adicionar escopo de acesso ao Google Drive que o DrawApp vai pedir pro usuário no fluxo de autorização (OAuth 2.0)
     - Vamos usar o escopo "drive.file", que permite **apenas** a criação/edição de arquivos que o usuário utilizou no DrawApp
 
-- Adicionar escopos para que o DrawApp tenha acesso aos dados necessários para realizar o login via conta Google
+- Adicionar escopos para que o DrawApp tenha acesso aos dados necessários para realizar o login via conta Google (OIDC)
     - Aqui vamos usar os escopos "openid" e "userinfo.email"
-    - Eles juntos retornam dados pessoais do usuário, como nome, email e foto de perfil
-
+    - Eles juntos retornam dados pessoais do usuário, como nome e email
 - Dentro do projeto, criar nossas credenciais:
     - URI de origem            -> http://localhost:5001
     - URI de callback do OAuth -> http://localhost:5001/oauth/drawapp-callback
     - URI de callback do OIDC  -> http://localhost:5001/oidc/drawapp-callback
-    - ClientId                 -> 11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com
-    - ClientSecret             -> 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
-
-* Sim, essas credenciais são reais, mas eu já apaguei elas do Google Cloud antes subir o código aqui pro GitHub.
+    - ClientId                 -> Identifica o DrawApp dentro do Authorization Server
+    - ClientSecret             -> Autentica o DrawApp dentro do Authorization Server
 
 ## 3️⃣ Autorização com OAuth 2.0
 
@@ -88,7 +89,7 @@ E indo além, como posso revogar o acesso do DrawApp ao meu Google Drive?
 
 Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de autorização criado justamente para problemas desse tipo (Delegated Authorization).
 
-Vamos definir alguns termos antes:
+### Vamos definir alguns termos antes:
 
 - Resource Owner
     - O usuário, que usa o DrawApp e é dono da conta no Google Drive
@@ -98,46 +99,84 @@ Vamos definir alguns termos antes:
     - Google Drive, onde estão os recursos (arquivos) do usuário
 - Authorization Server
     - Servidor do Google que intermedia todos os fluxos
-    - Ele é o responsável pela emissão de código e tokens de acesso
+    - Ele é o responsável pela emissão de códigos e tokens de acesso
 
-
+- Scopes
+    - São as permissões que o DrawApp quer receber do usuário (mostradas na tela de consentimento do Authorization Server)
+- Redirect URI
+    - Callback URI (http://localhost:5001/oauth/drawapp-callback)
+    - O Authorization Server redireciona o usuário pra essa URI quando ele permite que o DrawApp tenha acesso ao Google Drive
+- Authorization Code
+    - Esse código é a prova que o usuário clicou em "Permitir acesso" na tela de consentimento
+- Access Token
+    - O DrawApp utiliza o Authorization Code, juntamente com seu ClientId e ClientSecret, para obter esse token no Authorization Server
+    - O token obtido permite que o DrawApp tenha acesso ao Google Drive do usuário
 
 - Authorization Grant
-    - Flows -> Code | Implicit | Password Credentials | Client Credentials
-    - Response Type
     - Response Mode
-    - Code que prova que eu permiti o acesso do draw.io ao meu Drive
-    - O que o draw.io espera receber no callback quando o usuário permitir seu acesso ao Drive
-    - Usado no backend pelo draw.io para conseguir um AccessToken, que dá acesso ao Drive do usuário
-- Redirect URI
-    - Callback URI (fica no draw.io)
-    - URI que o draw.io usa para pegar o token gerado no Authorization Server quando o usuário permite
-- Access Token
-    - Token usado pelo draw.io para realizar a comunicação backend com o Drive (ler e salvar arquivos)
-- Scope
-    - Permissões que o token possui
-    - Ex: criar/editar arquivos
-    - Elas sao mostradas na tela de consentimento, quando o auth server perguntar se quero dar permissao
 - State
-    - Prova que eu iniciei e terminei o fluxo?
-- Nonce
-    - String aleatória
-- Front Channel
-    - Comunicacao via frontend (acontece no navegador) MENOS SEGURO
-    - Onde ocorre todo o fluxo ate a obtencao do Authorization Grant (code)
-- Back Channel
-    - Comunicacao via backend (server -> server) HTTPS / ALTAMENTE SEGURO
-- PKCE (Proof Key for Code Exchange)
-- Scopes
-    - id, name, email...
-- Flows
-    - Authorization Code
+    - Prova que eu iniciei e terminei o fluxo
+
+### Segue o fluxo de registro e login no sistema
+
+- 0️⃣ Usuário informa nome + email ao DrawApp
+- 1️⃣ Sistema gera token para definição de senha e o envia pra email informado
+- 2️⃣ Usuário envia token + senha pro DrawApp, completando seu registro no app
+- 3️⃣ Usuário agora informa email + senha pra logar no app
+- 4️⃣ DrawApp gera um Cookie de autenticação e retorna ele pro navegador do usuário
+
+<p align="center">
+  <img src="./DrawApp/Docs/01_register_and_login.gif" width="800" style="display: block; margin: 0 auto" />
+</p>
+
+### Uma vez logado, agora o usuário pode habilitar a integração com o Google Drive
 
 
 
-## OpenID Connect
 
-- Protocolo de Autenticação
+
+
+Agora sim podemos descrever os fluxo completo:
+- 0️⃣ Usuário informa nome e email para se cadastrar no DrawApp, define sua senha e realiza o login
+- 1️⃣ Uma vez logado, ele acessa o endpoint GET /oauth/google-drive para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
+- 2️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
+
+google.com./lalala
+
+DESCREVER O QUE CADA PARAMETRO SIGNIFICA!
+
+- 3️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Permitir acesso", o Authorization Server irá gerar um Authorization Code e enviá-lo pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial:
+
+http://localhost:5001/oauth/drawapp-callback?lalala=fewf
+
+DESCREVER O QUE CADA PARAMETRO SIGNIFICA!
+
+- 4️⃣ Ao receber os dados, o DrawApp utiliza o Authorization Code (juntamente com ClientId e ClientSecret) para realizar uma chamada pra API do Authorization Server (https://oauth2.googleapis.com/token), que valida todas as informações e retorna um Access Token pro DrawApp. Esse token é então salvo no banco de dados e toda vez que o usuário quiser salvar um diagrama no seu Google Drive, basta que o DrawApp utilize-o nas chamadas de API.
+
+- 5️⃣ Se o usuário não quiser mais permitir o acesso do DrawApp ao seu Google Drive, basta acessar sua conta Google e revogar as permissões dadas anteriormente.
+
+FAZER ISSO E VALIDAR QUE O ACCESS TOKEN REALMENTE N FUNCIONA MAIS...
+
+## 4️⃣ Autenticação com OpenID Connect (OIDC)
+
+Como acabamos de ver, o OAuth é desenhado apenas para resolver problemas de autorização. No entanto, com algumas modificações, daria pra extendê-lo e usá-lo como um protocolo de autenticação. Assim nasce o protocolo OpenID Connect!
+
+Perceba que o OAuth não entrega pro DrawApp nenhuma informação pessoal do usuário, como nome ou email, que poderiam ser usadas para autenticá-lo. O OIDC surge como uma camada acima do OAuth, definindo um padrão para que esses dados sobre o usuário cheguem até o Client.
+
+Dessa forma, o OIDC possibilita que o usuário utilize sua conta Google para se cadastrar e logar no DrawApp de maneira automática, apenas com alguns cliques.
+
+
+
+
+Mesmo fluxo, só que ao trocar o Authorization Code pelo Access Token, o DrawApp recebe junto o ID Token, que é um JWT contendo as informações do usuário. Com esses dados, o DrawApp consegue cadastrar e logar o usuário automaticamente.
+
+
+
+
+
+Single Sign-On (SSO)
+
+
 
 - Extensão do OAuth2
     - ID Token (JWT, assim como o Access Token)
@@ -148,7 +187,7 @@ Vamos definir alguns termos antes:
 
 
 
-## Referências
+## 5️⃣ Referências
 
 - OAuth 2.0 and OpenID Connect (in plain English) (https://youtu.be/996OiexHze0)
 - An Illustrated Guide to OAuth and OpenID Connect (https://youtu.be/t18YB3xDfXI)
