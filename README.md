@@ -137,7 +137,7 @@ client_id=11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.co
 scope=https://www.googleapis.com/auth/drive.file&
 redirect_uri=http://localhost:5001/oauth/drawapp-callback&
 response_type=code&
-state=CfDJ8HNYPa3
+state=qHtkl100DwyOWVLVmctDOW47
 ```
 
 Significado de cada parâmetro:
@@ -158,7 +158,7 @@ A URL de callback é a seguinte:
 
 ```
 http://localhost:5001/oauth/drawapp-callback?
-state=CfDJ8HNYPa3&
+state=qHtkl100DwyOWVLVmctDOW47&
 code=4/0ASVgi3LdgvHEjS-wQtZpra6C9xRH0nTwGhQrP8xb4fjrRxnHe_s0fFc2SBEj7ZTrjgYurA
 ```
 
@@ -181,31 +181,49 @@ Significado de cada parâmetro:
 
 ## 4️⃣ Autenticação com OpenID Connect (OIDC)
 
-Como acabamos de ver, o OAuth é desenhado apenas para resolver problemas de autorização. No entanto, com algumas modificações, daria pra extendê-lo e usá-lo como um protocolo de autenticação. Assim nasce o protocolo OpenID Connect!
+Vamos voltar pro segundo cenário apresentado lá no começo:
+
+Suponha que você não quer passar por todo o fluxo de se cadastrar no sistema, confirmar seu email, definir senha e só então logar no app.
+Afinal, você já está logado na sua conta Google, poderia muito bem usar ela para se **autenticar** no DrawApp.
+Mas novamente, como isso pode ser feito, de maneira simples e segura?
+
+Como acabamos de ver, o OAuth é desenhado para resolver problemas de autorização. No entanto, com algumas modificações, daria pra extendê-lo e usá-lo como um protocolo de autenticação. Assim nasce o protocolo OpenID Connect!
 
 Perceba que o OAuth não entrega pro DrawApp nenhuma informação pessoal do usuário, como nome ou email, que poderiam ser usadas para autenticá-lo. O OIDC surge como uma camada acima do OAuth, definindo um padrão para que esses dados sobre o usuário cheguem até o Client.
 
 Dessa forma, o OIDC possibilita que o usuário utilize sua conta Google para se cadastrar e logar no DrawApp de maneira automática, apenas com alguns cliques.
 
+### OpenID Connect passo a passo
 
+O fluxo do OIDC é praticamente o mesmo do OAuth, só que o DrawApp recebe um ID Token quando o usuário clica em "Continuar". Esse token é um JWT que contém diversas informações pessoais do usuário, como nome e email. Com esses dados, o DrawApp consegue cadastrar e logar o usuário automaticamente.
 
+- 0️⃣ Usuário acessa o endpoint GET /login/google para realizar login no DrawApp usando sua conta Google
+- 1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
 
-Mesmo fluxo, só que ao trocar o Authorization Code pelo Access Token, o DrawApp recebe junto o ID Token, que é um JWT contendo as informações do usuário. Com esses dados, o DrawApp consegue cadastrar e logar o usuário automaticamente.
+```
+https://accounts.google.com/o/oauth2/v2/auth?
+client_id=11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com&
+scope=openid profile https://www.googleapis.com/auth/userinfo.email&
+redirect_uri=http://localhost:5001/oidc/drawapp-callback&
+response_type=code id_token&
+state=zMivNStaPUItbPvLrwx7fx2Jw9M8JW23i1
+```
 
+Significado de cada parâmetro:
 
+    - client_id: identificador do DrawApp lá no Google (obtido no Setup Inicial)
+    - scope: escopos que o DrawApp quer ter acesso
+    - redirect_uri: pra onde o Authorization Server deve redirecionar o usuário quando ele permitir o acesso
+    - response_type: qual tipo de resposta o DrawApp espera receber do Authorization Server (no caso, ele espera receber um Authorization Code + um ID Token)
+    - state: valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
+- 2️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Continuar", o Authorization Server irá gerar um Authorization Code + ID Token e enviá-los pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial
 
+<p align="center">
+  <img src="./DrawApp/Docs/oidc.png" width="800" style="display: block; margin: 0 auto" />
+</p>
 
-Single Sign-On (SSO)
-
-
-
-- Extensão do OAuth2
-    - ID Token (JWT, assim como o Access Token)
-    - Userinfo Endpoint
-    - Standard set of scopes (openid)
-
-
+- 3️⃣ Internamente, o DrawApp utiliza os dados contidos no ID Token para registrar o usuário no sistema e já realizar o login, retornando um Cookie de autenticação pro navegador.
 
 
 
@@ -216,26 +234,3 @@ Single Sign-On (SSO)
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
 - An introduction to OpenID Connect in ASP.NET Core (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core)
 - How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-FileId = "1bjN6azqxL6vpk2nPOj1-FAchBqitqMba"
-FileId = "1t5YO1qN_Py6v0Tay9KfaQMinlLY77VKJ"
-
-
-
-
