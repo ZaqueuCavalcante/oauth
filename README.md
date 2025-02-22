@@ -126,7 +126,7 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 
 ### Uma vez logado, agora o usuário pode habilitar a integração com o Google Drive
 
-- 0️⃣ Usuário acessa o endpoint GET /oauth/google-drive para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
+- 0️⃣ Usuário acessa o endpoint **GET /oauth/google-drive** para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
 - 1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
 
 ```
@@ -140,11 +140,11 @@ state=qHtkl100DwyOWVLVmctDOW47
 
 Significado de cada parâmetro:
 
-    - client_id: identificador do DrawApp lá no Google (obtido no Setup Inicial)
-    - scope: escopo que o DrawApp quer ter acesso
-    - redirect_uri: pra onde o Authorization Server deve redirecionar o usuário quando ele permitir o acesso
-    - response_type: qual tipo de resposta o DrawApp espera receber do Authorization Server (no caso, ele espera receber um Authorization Code)
-    - state: valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
+    - **client_id**: identificador do DrawApp lá no Google (obtido no Setup Inicial)
+    - **scope**: escopo que o DrawApp quer ter acesso
+    - **redirect_uri**: pra onde o Authorization Server deve redirecionar o usuário quando ele permitir o acesso
+    - **response_type**: qual tipo de resposta o DrawApp espera receber do Authorization Server (no caso, ele espera receber um Authorization Code)
+    - **state**: valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
 - 2️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Continuar", o Authorization Server irá gerar um Authorization Code e enviá-lo pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial
 
