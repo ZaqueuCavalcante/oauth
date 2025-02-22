@@ -22,8 +22,6 @@ A seguir veremos como esses dois problemas podem ser resolvidos através dos pro
 - 4️⃣ Autenticação com OpenID Connect (OIDC)
 - 5️⃣ Referências
 
-Adicionei um docker-compose.yml ao projeto, caso você queira rodá-lo na sua máquina também.
-
 ## 1️⃣ Simulando o Draw.io
 
 Para ver na prática como esses protocolos funcionam, criei uma API em .NET bem simples, que vai simular a aplicação do Draw.io nos dois cenários descritos anteriormente.
@@ -74,6 +72,8 @@ Seguem os principais passos para realizar esse setup inicial:
     - URI de callback do OIDC  -> http://localhost:5001/oidc/drawapp-callback
     - ClientId                 -> Identifica o DrawApp dentro do Authorization Server (Google)
     - ClientSecret             -> Autentica o DrawApp dentro do Authorization Server (Google)
+
+Adicionei um docker-compose.yml ao projeto, caso você queira rodá-lo na sua máquina também.
 
 ## 3️⃣ Autorização com OAuth 2.0
 
