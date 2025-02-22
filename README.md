@@ -22,6 +22,8 @@ Resposta: usando o OpenID Connect!
 - 4️⃣ Autenticação com OpenID Connect (OIDC)
 - 5️⃣ Referências
 
+Adicionei um docker-compose.yml ao projeto, caso você queira rodá-lo na sua máquina também.
+
 ## 1️⃣ Simulando o Draw.io
 
 Para ver na prática como esses protocolos funcionam, criei uma API em .NET bem simples, que vai simular a aplicação do Draw.io nos dois cenários descritos anteriormente.

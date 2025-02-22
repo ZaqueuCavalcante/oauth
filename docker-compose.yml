@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17.3
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres && psql -U postgres -d postgres -c 'SELECT 1;'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./BackEnd/s.sql:/docker-entrypoint-initdb.d/s.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  drawapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.drawapp
+    hostname: api01
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+      - Database__ConnectionString=Host=db;Username=postgres;Password=postgres;Port=5432;Database=drawapp-db;Minimum Pool Size=10;Maximum Pool Size=10;Multiplexing=true;
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
+networks:
+  default:
+    driver: bridge
+    name: net-pi
