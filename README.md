@@ -85,31 +85,31 @@ Mas como você pode habilitar essa funcionalidade de maneira simples e segura?
 Como garantir que o DrawApp vai poder acessar apenas os arquivos que você **autorizar**?
 E indo além, como posso revogar o acesso do DrawApp ao meu Google Drive?
 
-Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de autorização criado justamente para problemas desse tipo (Delegated Authorization).
+Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de autorização criado justamente para problemas desse tipo (Delegated Authorization)!
 
 ### Vamos definir alguns termos antes:
 
-- Resource Owner
+- **Resource Owner**
     - O usuário, que usa o DrawApp e é dono da conta no Google Drive
-- Client
+- **Client**
     - DrawApp, a aplicação que está pedindo permissão ao usuário para acessar seus arquivos no Google Drive
-- Resource Server
+- **Resource Server**
     - Google Drive, onde estão os recursos (arquivos) do usuário
-- Authorization Server
+- **Authorization Server**
     - Servidor do Google que intermedia todos os fluxos
     - Ele é o responsável pela emissão de códigos e tokens de acesso
 
-- Scopes
+- **Scopes**
     - São as permissões que o DrawApp quer receber do usuário (mostradas na tela de consentimento do Authorization Server)
-- Redirect URI
+- *Redirect URI*
     - Callback URI (http://localhost:5001/oauth/drawapp-callback)
     - O Authorization Server redireciona o usuário pra essa URI quando ele permite que o DrawApp tenha acesso ao Google Drive
-- Authorization Code
+- **Authorization Code**
     - Esse código é a prova que o usuário clicou em "Permitir acesso" na tela de consentimento
-- Access Token
+- **Access Token**
     - O DrawApp utiliza o Authorization Code, juntamente com seu ClientId e ClientSecret, para obter esse token no Authorization Server
     - O token obtido permite que o DrawApp tenha acesso ao Google Drive do usuário
-- State
+- **State**
     - Valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
 ### Segue o fluxo de registro e login no sistema
