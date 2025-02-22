@@ -50,7 +50,7 @@ Ela possui os seguintes endpoints:
   <img src="./DrawApp/Docs/00_draw_app_api.gif" width="800" style="display: block; margin: 0 auto" />
 </p>
 
-Estou usando o Postgres para salvar todos os dados do DrawApp.
+Estou usando o Postgres para salvar todos os dados do DrawApp. Tenho apenas duas tabelas, uma pros usuários e outra para seus tokens de acesso.
 
 ## 2️⃣ Setup Inicial
 
@@ -60,26 +60,26 @@ Afinal, quando o usuário é redirecionado pra tela de consenso, o Google já co
 Seguem os principais passos para realizar esse setup inicial:
 - Criar projeto no Google Cloud e configurar seu nome como DrawApp
 - Habilitar o acesso do DrawApp à API do Google Drive
-- Adicionar meu email como usuário de teste
+- Adicionar meu email como usuário de teste (para que funcione em localhost)
 
 - Adicionar escopo de acesso ao Google Drive que o DrawApp vai pedir pro usuário no fluxo de autorização (OAuth 2.0)
     - Vamos usar o escopo "drive.file", que permite **apenas** a criação/edição de arquivos que o usuário utilizou no DrawApp
 
 - Adicionar escopos para que o DrawApp tenha acesso aos dados necessários para realizar o login via conta Google (OIDC)
-    - Aqui vamos usar os escopos "openid" e "userinfo.email"
-    - Eles juntos retornam dados pessoais do usuário, como nome e email
+    - Aqui vamos usar os escopos "openid" e "userinfo.email", que juntos retornam dados pessoais do usuário, como nome e email
+
 - Dentro do projeto, criar nossas credenciais:
     - URI de origem            -> http://localhost:5001
     - URI de callback do OAuth -> http://localhost:5001/oauth/drawapp-callback
     - URI de callback do OIDC  -> http://localhost:5001/oidc/drawapp-callback
-    - ClientId                 -> Identifica o DrawApp dentro do Authorization Server
-    - ClientSecret             -> Autentica o DrawApp dentro do Authorization Server
+    - ClientId                 -> Identifica o DrawApp dentro do Authorization Server (Google)
+    - ClientSecret             -> Autentica o DrawApp dentro do Authorization Server (Google)
 
 ## 3️⃣ Autorização com OAuth 2.0
 
 Vamos voltar pro primeiro cenário apresentado lá no começo:
 
-Você vai se cadastrar no DrawApp, informar nome e email, confirmar seu email, definir sua senha e enfim logar no sistema.
+> Você vai se cadastrar no DrawApp, informar nome e email, confirmar seu email, definir sua senha e enfim logar no sistema.
 O DrawApp possui integração com o Google Drive, o que permite que você salve seus diagramas na nuvem e os acesse de qualquer lugar.
 Mas como você pode habilitar essa funcionalidade de maneira simples e segura?
 Como garantir que o DrawApp vai poder acessar apenas os arquivos que você **autorizar**?
@@ -181,7 +181,7 @@ Significado de cada parâmetro:
 
 Vamos voltar pro segundo cenário apresentado lá no começo:
 
-Suponha que você não quer passar por todo o fluxo de se cadastrar no sistema, confirmar seu email, definir senha e só então logar no app.
+> Suponha que você não quer passar por todo o fluxo de se cadastrar no sistema, confirmar seu email, definir senha e só então logar no app.
 Afinal, você já está logado na sua conta Google, poderia muito bem usar ela para se **autenticar** no DrawApp.
 Mas novamente, como isso pode ser feito, de maneira simples e segura?
 
