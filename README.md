@@ -30,20 +30,20 @@ Para ver na prática como esses protocolos funcionam, criei uma API em .NET bem 
 Vou me referir a essa API como DrawApp de agora em diante.
 
 Ela possui os seguintes endpoints:
-- POST /users
+- **POST /users**
     - Cria um usuário, informando nome, email e senha
-- POST /login
+- **POST /login**
     - Realiza o login no sistema, informando email e senha (a autenticação é feita via Cookie)
 
-- GET /users/data
+- **GET /users/data**
     - Retorna alguns dados do usuário logado: nome, email e se a integração com o Google Drive está ativada
 
-- GET /oauth/google-drive
+- **GET /oauth/google-drive**
     - Redireciona o usuário logado para a tela de consenso do Google (onde ele pode autorizar que o DrawApp salve dados no seu Google Drive)
-- POST /google-drive/files
+- **POST /google-drive/files**
     - Permite a criação de arquivos no Google Drive do usuário, caso ele tenha autorizado o acesso usando o endpoint anterior
 
-- GET /login/google
+- **GET /login/google**
     - Redireciona o usuário para a tela de consenso do Google (onde ele pode autorizar que o DrawApp obtenha seus dados pessoais para a realização do cadastro + login)
 
 <p align="center">
@@ -101,7 +101,7 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 
 - **Scopes**
     - São as permissões que o DrawApp quer receber do usuário (mostradas na tela de consentimento do Authorization Server)
-- *Redirect URI*
+- **Redirect URI**
     - Callback URI (http://localhost:5001/oauth/drawapp-callback)
     - O Authorization Server redireciona o usuário pra essa URI quando ele permite que o DrawApp tenha acesso ao Google Drive
 - **Authorization Code**
