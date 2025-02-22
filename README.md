@@ -114,7 +114,7 @@ Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é
     - O DrawApp utiliza o Authorization Code, juntamente com seu ClientId e ClientSecret, para obter esse token no Authorization Server
     - O token obtido permite que o DrawApp tenha acesso ao Google Drive do usuário
 - State
-    - Prova que eu iniciei e terminei o fluxo
+    - Valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
 ### Segue o fluxo de registro e login no sistema
 
