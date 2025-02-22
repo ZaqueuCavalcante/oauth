@@ -111,9 +111,6 @@ Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é
 - Access Token
     - O DrawApp utiliza o Authorization Code, juntamente com seu ClientId e ClientSecret, para obter esse token no Authorization Server
     - O token obtido permite que o DrawApp tenha acesso ao Google Drive do usuário
-
-- Authorization Grant
-    - Response Mode
 - State
     - Prova que eu iniciei e terminei o fluxo
 
@@ -131,31 +128,56 @@ Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é
 
 ### Uma vez logado, agora o usuário pode habilitar a integração com o Google Drive
 
+- 0️⃣ Usuário acessa o endpoint GET /oauth/google-drive para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
+- 1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
 
+```
+https://accounts.google.com/o/oauth2/v2/auth?
+client_id=11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com&
+scope=https://www.googleapis.com/auth/drive.file&
+redirect_uri=http://localhost:5001/oauth/drawapp-callback&
+response_type=code&
+state=CfDJ8HNYPa3
+```
 
+Significado de cada parâmetro:
 
+    - client_id: identificador do DrawApp lá no Google (obtido no Setup Inicial)
+    - scope: escopo que o DrawApp quer ter acesso
+    - redirect_uri: pra onde o Authorization Server deve redirecionar o usuário quando ele permitir o acesso
+    - response_type: qual tipo de resposta o DrawApp espera receber do Authorization Server (no caso, ele espera receber um Authorization Code)
+    - state: valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
+- 2️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Continuar", o Authorization Server irá gerar um Authorization Code e enviá-lo pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial
 
-Agora sim podemos descrever os fluxo completo:
-- 0️⃣ Usuário informa nome e email para se cadastrar no DrawApp, define sua senha e realiza o login
-- 1️⃣ Uma vez logado, ele acessa o endpoint GET /oauth/google-drive para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
-- 2️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
+<p align="center">
+  <img src="./DrawApp/Docs/oauth_consent_scopes.png" width="800" style="display: block; margin: 0 auto" />
+</p>
 
-google.com./lalala
+A URL de callback é a seguinte:
 
-DESCREVER O QUE CADA PARAMETRO SIGNIFICA!
+```
+http://localhost:5001/oauth/drawapp-callback?
+state=CfDJ8HNYPa3&
+code=4/0ASVgi3LdgvHEjS-wQtZpra6C9xRH0nTwGhQrP8xb4fjrRxnHe_s0fFc2SBEj7ZTrjgYurA
+```
 
-- 3️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Permitir acesso", o Authorization Server irá gerar um Authorization Code e enviá-lo pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial:
+Significado de cada parâmetro:
 
-http://localhost:5001/oauth/drawapp-callback?lalala=fewf
+    - state: mesmo valor explicado anteriormente
+    - code: Authorization Code, a prova de que o usuário permitiu que o DrawApp tivesse acesso ao escopo drive.file do seu Google Drive
 
-DESCREVER O QUE CADA PARAMETRO SIGNIFICA!
+- 3️⃣ Internamente, o DrawApp utiliza o Authorization Code (juntamente com ClientId + ClientSecret) para realizar uma chamada pra API do Authorization Server (https://oauth2.googleapis.com/token), que valida todas as informações e retorna um Access Token pro DrawApp. Esse token é então salvo no banco de dados e toda vez que o usuário quiser salvar um diagrama no seu Google Drive, basta que o DrawApp utilize-o nas chamadas de API. Para provar que tudo funciona, chamei o endpoint POST /google-drive/files para criar arquivos no Google Drive via DrawApp. Segue o print dos arquivos criados:
 
-- 4️⃣ Ao receber os dados, o DrawApp utiliza o Authorization Code (juntamente com ClientId e ClientSecret) para realizar uma chamada pra API do Authorization Server (https://oauth2.googleapis.com/token), que valida todas as informações e retorna um Access Token pro DrawApp. Esse token é então salvo no banco de dados e toda vez que o usuário quiser salvar um diagrama no seu Google Drive, basta que o DrawApp utilize-o nas chamadas de API.
+<p align="center">
+  <img src="./DrawApp/Docs/created_files.png" width="800" style="display: block; margin: 0 auto" />
+</p>
 
-- 5️⃣ Se o usuário não quiser mais permitir o acesso do DrawApp ao seu Google Drive, basta acessar sua conta Google e revogar as permissões dadas anteriormente.
+- 4️⃣ Se o usuário não quiser mais permitir o acesso do DrawApp ao seu Google Drive, basta acessar sua conta Google e revogar as permissões dadas anteriormente.
 
-FAZER ISSO E VALIDAR QUE O ACCESS TOKEN REALMENTE N FUNCIONA MAIS...
+<p align="center">
+  <img src="./DrawApp/Docs/authorized_draw_app.png" width="800" style="display: block; margin: 0 auto" />
+</p>
 
 ## 4️⃣ Autenticação com OpenID Connect (OIDC)
 
@@ -194,3 +216,26 @@ Single Sign-On (SSO)
 - ASP.NET Core OAuth Authorization (.NET 7 Minimal Apis C#) (https://youtu.be/0uSwPdYOm9k)
 - An introduction to OpenID Connect in ASP.NET Core (https://andrewlock.net/an-introduction-to-openid-connect-in-asp-net-core)
 - How to secure ASP.NET Core with OAuth and JSON Web Tokens (https://blog.elmah.io/how-to-secure-asp-net-core-with-oauth-and-json-web-tokens/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FileId = "1bjN6azqxL6vpk2nPOj1-FAchBqitqMba"
+FileId = "1t5YO1qN_Py6v0Tay9KfaQMinlLY77VKJ"
+
+
+
+
