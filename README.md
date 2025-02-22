@@ -13,6 +13,8 @@ No segundo cenário, suponha que você não quer passar por todo o fluxo de se c
 Afinal, você já está logado na sua conta Google, poderia muito bem usar ela para se **autenticar** no Draw.io.
 Mas novamente, como isso pode ser feito, de maneira simples e segura?
 
+A seguir veremos como esses dois problemas podem ser resolvidos através dos protocolos OAuth e OIDC!
+
 ## Sumário
 - 1️⃣ Simulando o Draw.io
 - 2️⃣ Setup Inicial
