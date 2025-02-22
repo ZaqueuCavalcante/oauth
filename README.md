@@ -200,8 +200,9 @@ Dessa forma, o OIDC possibilita que o usuário utilize sua conta Google para se 
 
 O fluxo do OIDC é praticamente o mesmo do OAuth, só que o DrawApp recebe um ID Token quando o usuário clica em "Continuar". Esse token é um JWT que contém diversas informações pessoais do usuário, como nome e email. Com esses dados, o DrawApp consegue cadastrar e logar o usuário automaticamente.
 
-- 0️⃣ Usuário acessa o endpoint GET /login/google para realizar login no DrawApp usando sua conta Google
-- 1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
+0️⃣ Usuário acessa o endpoint GET /login/google para realizar login no DrawApp usando sua conta Google
+
+1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
 
 ```
 https://accounts.google.com/o/oauth2/v2/auth?
@@ -220,15 +221,13 @@ Significado de cada parâmetro:
     - response_type: qual tipo de resposta o DrawApp espera receber do Authorization Server (no caso, ele espera receber um Authorization Code + um ID Token)
     - state: valor aleatório gerado pelo Client e validado depois na chamada de callback (ajuda a mitigar ataques de Cross-Site Request Forgery)
 
-- 2️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Continuar", o Authorization Server irá gerar um Authorization Code + ID Token e enviá-los pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial
+2️⃣ Agora na página de consentimento do Authorization Server, o usuário pode ver quais escopos o DrawApp quer acessar. Ao clicar em "Continuar", o Authorization Server irá gerar um Authorization Code + ID Token e enviá-los pro DrawApp ao redirecionar o usuário pra Callback URI definida no setup inicial
 
 <p align="center">
   <img src="./DrawApp/Docs/oidc.png" width="800" style="display: block; margin: 0 auto" />
 </p>
 
-- 3️⃣ Internamente, o DrawApp utiliza os dados contidos no ID Token para registrar o usuário no sistema e já realizar o login, retornando um Cookie de autenticação pro navegador.
-
-
+3️⃣ Internamente, o DrawApp utiliza os dados contidos no ID Token para registrar o usuário no sistema e já realizar o login, retornando um Cookie de autenticação pro navegador.
 
 ## 5️⃣ Referências
 
