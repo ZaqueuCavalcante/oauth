@@ -33,22 +33,18 @@ Ela possui os seguintes endpoints:
 - POST /users
     - Cria um usuário, informando nome, email e senha
 - POST /login
-    - Realiza o login no sistema, informando email e senha
-    - A autenticação é feita via Cookie
+    - Realiza o login no sistema, informando email e senha (a autenticação é feita via Cookie)
 
 - GET /users/data
     - Retorna alguns dados do usuário logado: nome, email e se a integração com o Google Drive está ativada
 
 - GET /oauth/google-drive
-    - Redireciona o usuário logado para a tela de consenso do Google
-    - Nela o usuário pode autorizar que o DrawApp salve dados no seu Google Drive
+    - Redireciona o usuário logado para a tela de consenso do Google (onde ele pode autorizar que o DrawApp salve dados no seu Google Drive)
 - POST /google-drive/files
     - Permite a criação de arquivos no Google Drive do usuário, caso ele tenha autorizado o acesso usando o endpoint anterior
 
 - GET /login/google
-    - Redireciona o usuário deslogado para a tela de consenso do Google
-    - Nela o usuário pode autorizar que o DrawApp tenha acesso ao seu nome e email
-    - Se o usuário permitir, a API automaticamente realiza seu cadastro e o loga no sistema
+    - Redireciona o usuário para a tela de consenso do Google (onde ele pode autorizar que o DrawApp obtenha seus dados pessoais para a realização do cadastro + login)
 
 <p align="center">
   <img src="./DrawApp/Docs/00_draw_app_api.gif" width="800" style="display: block; margin: 0 auto" />
