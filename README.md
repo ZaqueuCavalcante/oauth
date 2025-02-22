@@ -130,6 +130,10 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 
 ### Uma vez logado, agora o usuário pode habilitar a integração com o Google Drive
 
+<p align="center">
+  <img src="./DrawApp/Docs/oauth_flow.gif" width="800" style="display: block; margin: 0 auto" />
+</p>
+
 0️⃣ Usuário acessa o endpoint **GET /oauth/google-drive** para permitir que o DrawApp possa salvar arquivos na sua conta do Google Drive
 
 1️⃣ Ao acessar esse endpoint, o DrawApp monta a seguinte url e redireciona o usuário pro Authorization Server através dela
@@ -199,6 +203,10 @@ Dessa forma, o OIDC possibilita que o usuário utilize sua conta Google para se 
 ### OpenID Connect passo a passo
 
 O fluxo do OIDC é praticamente o mesmo do OAuth, só que o DrawApp recebe um ID Token quando o usuário clica em "Continuar". Esse token é um JWT que contém diversas informações pessoais do usuário, como nome e email. Com esses dados, o DrawApp consegue cadastrar e logar o usuário automaticamente.
+
+<p align="center">
+  <img src="./DrawApp/Docs/oidc_flow.gif" width="800" style="display: block; margin: 0 auto" />
+</p>
 
 0️⃣ Usuário acessa o endpoint GET /login/google para realizar login no DrawApp usando sua conta Google
 
