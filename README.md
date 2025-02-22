@@ -114,11 +114,11 @@ Podemos atingir esses objetivos usando o OAuth, pois ele é um protocolo de auto
 
 ### Segue o fluxo de registro e login no sistema
 
-- 0️⃣ Usuário informa nome + email ao DrawApp
-- 1️⃣ Sistema gera token para definição de senha e o envia pra email informado
-- 2️⃣ Usuário envia token + senha pro DrawApp, completando seu registro no app
-- 3️⃣ Usuário agora informa email + senha pra logar no app
-- 4️⃣ DrawApp gera um Cookie de autenticação e retorna ele pro navegador do usuário
+    0️⃣ Usuário informa nome + email ao DrawApp
+    1️⃣ Sistema gera token para definição de senha e o envia pra email informado
+    2️⃣ Usuário envia token + senha pro DrawApp, completando seu registro no app
+    3️⃣ Usuário agora informa email + senha pra logar no app
+    4️⃣ DrawApp gera um Cookie de autenticação e retorna ele pro navegador do usuário
 
 <p align="center">
   <img src="./DrawApp/Docs/01_register_and_login.gif" width="800" style="display: block; margin: 0 auto" />
