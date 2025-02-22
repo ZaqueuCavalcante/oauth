@@ -135,7 +135,7 @@ Como você já sabe, podemos atingir esses objetivos usando o OAuth, pois ele é
 
 ```
 https://accounts.google.com/o/oauth2/v2/auth?
-client_id=11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com&
+client_id=11118065658&
 scope=https://www.googleapis.com/auth/drive.file&
 redirect_uri=http://localhost:5001/oauth/drawapp-callback&
 response_type=code&
@@ -204,7 +204,7 @@ O fluxo do OIDC é praticamente o mesmo do OAuth, só que o DrawApp recebe um ID
 
 ```
 https://accounts.google.com/o/oauth2/v2/auth?
-client_id=11118065658-9s8e2aj77nguipq43lle8lcidu8vr5kd.apps.googleusercontent.com&
+client_id=11118065658&
 scope=openid profile https://www.googleapis.com/auth/userinfo.email&
 redirect_uri=http://localhost:5001/oidc/drawapp-callback&
 response_type=code id_token&
